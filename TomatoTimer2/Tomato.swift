@@ -6,7 +6,7 @@ class Tomato{
     
     init(_ name:String){
         self.name = name
-        self.description = ""
+        self.description = "Click To Enter Description"
     }
     
     init(_ name:String, _ description: String){
