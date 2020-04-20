@@ -30,15 +30,24 @@ class LoginScreenViewController: UIViewController{
         setupCreateButton(self.view)
     }
     func setupCreateButton(_ inputView: UIView){
-        let view = inputView
-        view.backgroundColor = UIColor.white
-        let createButton:UIButton = UIButton(type: .system)
-        let size = 40
-        createButton.frame = CGRect(x:350, y: 30, width: size, height: size)
-        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
-        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
-        createButton.setTitle("+", for: .normal)
-        view.addSubview(createButton)
+//old button method that loads in the page and not in the bar!
+//        let view = inputView
+//        view.backgroundColor = UIColor.white
+//        let createButton:UIButton = UIButton(type: .system)
+//        let size = 40
+//        //y value i had before was 30
+//        createButton.frame = CGRect(x:350, y: 70, width: size, height: size)
+//        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
+//        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
+//        createButton.setTitle("+", for: .normal)
+//        view.addSubview(createButton)
+        
+        
+        
+        let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
+        navigationItem.rightBarButtonItem = append
+        
+        
         print("button loaded")
     }
     
@@ -67,7 +76,9 @@ class LoginScreenViewController: UIViewController{
     @objc func createButtonClicked(_ sender: UIButton) {
         //TODO: make page for creating tomatos
         print("button clicked!")
-        
+        let vc = CreateTomatoViewController()
+        navigationController?.pushViewController(vc, animated: true)
+//        vc.dismiss(animated: true, completion: nil)
     }
     
     
