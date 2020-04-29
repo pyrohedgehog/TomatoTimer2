@@ -70,6 +70,16 @@ class CreateTomatoViewController: UIViewController, UITextFieldDelegate, UITextV
     }
         
     func setupCreateButton(){
+        let width = 100, height = 50
+        createButton = UIButton(frame: CGRect(x: 150, y: 600, width: width, height: height))
+        createButton.backgroundColor = .green
+        createButton.setTitle("Create", for: .normal)
+        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
+        self.view.addSubview(createButton)
+    }
+    
+    
+    @objc func createButtonClicked(sender: UIButton!){
         
     }
 
