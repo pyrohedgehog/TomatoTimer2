@@ -17,6 +17,7 @@ class LoginScreenViewController: UIViewController{
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     var tomatos:[Tomato] = []
+    
     //load function
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,20 +31,6 @@ class LoginScreenViewController: UIViewController{
         setupCreateButton(self.view)
     }
     func setupCreateButton(_ inputView: UIView){
-//old button method that loads in the page and not in the bar!
-//        let view = inputView
-//        view.backgroundColor = UIColor.white
-//        let createButton:UIButton = UIButton(type: .system)
-//        let size = 40
-//        //y value i had before was 30
-//        createButton.frame = CGRect(x:350, y: 70, width: size, height: size)
-//        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
-//        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
-//        createButton.setTitle("+", for: .normal)
-//        view.addSubview(createButton)
-        
-        
-        
         let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
         navigationItem.rightBarButtonItem = append
         
@@ -76,9 +63,13 @@ class LoginScreenViewController: UIViewController{
     @objc func createButtonClicked(_ sender: UIButton) {
         //TODO: make page for creating tomatos
         print("button clicked!")
-        let vc = CreateTomatoViewController()
+        let vc = CreateTomatoViewController(addTomato)
         navigationController?.pushViewController(vc, animated: true)
-//        vc.dismiss(animated: true, completion: nil)
+//        vc.dismiss(animated: true, completion: nil) // i dont remember what this does, so im keeping this comment here for when something stops working
+        
+        
+//        tomatos.popLast()
+//        print(tomatos.count)
     }
     
     
@@ -86,6 +77,15 @@ class LoginScreenViewController: UIViewController{
     func loadTableData(){
         //TODO: actually make this load data from a saved point
         self.tomatos = [Tomato("Hello"),Tomato("world")]
+    }
+    
+    
+    
+    func addTomato(_ tomato:Tomato){
+        //used to add new tomatos, passed to the Create Tomato View on construction
+        print("new tomato added")
+        tomatos.append(tomato)
+        tableView.reloadData()
     }
 
 }
@@ -105,8 +105,17 @@ extension LoginScreenViewController: UITableViewDataSource, UITableViewDelegate 
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        let tomatoController = EditTomatoViewController(tomatos[indexPath.row])
+        navigationController?.pushViewController(tomatoController, animated: true)
+        
+    }
+    
+    
     //TODO: LIST
     //write cell creator page
+    //write tomato creator button functionalitty
     //write on click function for already created cells
     //add swipe interface
     

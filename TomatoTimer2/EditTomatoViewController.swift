@@ -1,36 +1,34 @@
 //
-//  CreateTomatoViewController.swift
+//  EditTomatoViewController.swift
 //  TomatoTimer2
 //
-//  Created by jonah wilmsmeyer on 2020-04-19.
+//  Created by jonah wilmsmeyer on 2020-05-09.
 //  Copyright © 2020 jonah wilmsmeyer. All rights reserved.
 //
 
 import UIKit
 
-class CreateTomatoViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+class EditTomatoViewController: UIViewController {
     var name : UITextField = UITextField();
     var info : UITextView = UITextView();
     var nameText = "Click To Enter Title"
     var infoText = "Click To Enter Description"
-    var createButton = UIButton()
-    var appendTomato: (_ tomato : Tomato) ->()
+    var saveButton = UIButton()
+    var tomato : Tomato;
     
-    init(_ addTomato: @escaping (_ tomato:Tomato)->()){
-        appendTomato = addTomato
+    init(_ tomato: Tomato){
+        self.tomato = tomato
+        self.nameText = tomato.name
+        self.infoText = tomato.description//really inconsistant naming, needs to be fixed.
+        
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    
-    //MVP Tomato Created!
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    super.viewDidLoad()
         view.backgroundColor = UIColor.white
         
         setupTextInputs()
@@ -42,9 +40,10 @@ class CreateTomatoViewController: UIViewController, UITextFieldDelegate, UITextV
     func setupTextInputs(){
         let width = 360
         //name setup
-        name.delegate = self
+        name.delegate = self as? UITextFieldDelegate
         name = UITextField(frame: CGRect(x: 20, y: 100, width: width, height: 40))
-        name.placeholder = nameText
+//        name.placeholder = nameText
+        name.text = nameText
         name.font = UIFont.systemFont(ofSize: 18)
         name.borderStyle = UITextField.BorderStyle.line
         name.autocorrectionType = UITextAutocorrectionType.yes
@@ -56,8 +55,8 @@ class CreateTomatoViewController: UIViewController, UITextFieldDelegate, UITextV
         
         //info setup
         info = UITextView(frame: CGRect(x: 20, y: 150, width: width, height: 200))
-        info.delegate = self
-
+        info.delegate = self as? UITextViewDelegate
+        
         info.text = infoText
         info.textColor = UIColor.lightGray
         info.font = UIFont.systemFont(ofSize: 15)
@@ -67,7 +66,7 @@ class CreateTomatoViewController: UIViewController, UITextFieldDelegate, UITextV
         
         
         self.view.addSubview(info)
-    }
+}
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
@@ -80,25 +79,24 @@ class CreateTomatoViewController: UIViewController, UITextFieldDelegate, UITextV
             textView.textColor = UIColor.lightGray
         }
     }
-        
+    
     func setupCreateButton(){
         let width = 100, height = 50
-        createButton = UIButton(frame: CGRect(x: 150, y: 600, width: width, height: height))
-        createButton.backgroundColor = .green
-        createButton.setTitle("Create", for: .normal)
-        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
-        self.view.addSubview(createButton)
+        saveButton = UIButton(frame: CGRect(x: 150, y: 600, width: width, height: height))
+        saveButton.backgroundColor = .green
+        saveButton.setTitle("Save", for: .normal)
+        saveButton.addTarget(self, action: #selector(saveButtonClicked), for: .touchUpInside)
+        self.view.addSubview(saveButton)
     }
-    
-    
-    @objc func createButtonClicked(sender: UIButton!){
-        let creationName =  (name.text == nil || name.text!.isEmpty) ? nameText: name.text!
         
-        let creationDescription : String = info.text.isEmpty ? infoText: info.text
-        let tomato = Tomato(creationName, creationDescription)
-        appendTomato(tomato)
         
-        print("saved from creation page!")
+    @objc func saveButtonClicked(sender: UIButton!){
+        tomato.name =  (name.text == nil || name.text!.isEmpty) ? "": name.text!
+        
+        tomato.description = info.text
+        print("saved!")
     }
+
+    
 
 }
