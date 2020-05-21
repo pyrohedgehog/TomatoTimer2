@@ -8,6 +8,10 @@ class Tomato{
         self.name = name
         self.description = "Click To Enter Description"
     }
+    init(){
+        self.name = "Click To Enter A Title"
+        self.description = "Click To Enter Description"
+    }
     
     init(_ name:String, _ description: String){
         self.name = name

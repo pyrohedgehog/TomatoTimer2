@@ -63,7 +63,9 @@ class LoginScreenViewController: UIViewController{
     @objc func createButtonClicked(_ sender: UIButton) {
         //TODO: make page for creating tomatos
         print("button clicked!")
-        let vc = CreateTomatoViewController(addTomato)
+//        let vc = CreateTomatoViewController(addTomato)
+        let tomato = Tomato()
+        let vc = TomatoDesignerViewController(tomato, addTomato)
         navigationController?.pushViewController(vc, animated: true)
 //        vc.dismiss(animated: true, completion: nil) // i dont remember what this does, so im keeping this comment here for when something stops working
         

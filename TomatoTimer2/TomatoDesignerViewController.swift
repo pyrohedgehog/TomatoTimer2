@@ -14,7 +14,22 @@ class TomatoDesignerViewController: UIViewController{
     
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
-    var viewElements:[UITableViewCell] = []
+    var viewElements : [UITableViewCell] = []
+    var textFieldElements : [UITextField] = []
+    
+    var resolvingAction:(_ tomato:Tomato)->()
+    var editingTomato :Tomato
+    
+    init(_ inputTomato:Tomato, _ resolvingAction: @escaping (_ tomato:Tomato)->()){
+        self.resolvingAction = resolvingAction
+        editingTomato = inputTomato
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     
     //load function
     override func viewDidLoad() {
@@ -34,8 +49,16 @@ class TomatoDesignerViewController: UIViewController{
         print("save button loaded")
     }
     @objc func saveButtonClicked(_ sender: UIButton){
+//        editingTomato.name = (viewElements[0].text == nil || viewElements[0].text!.isEmpty) ? "": viewElements[0].text!
+//        print(viewElements[0].subviews[0].text)
         
-        print("save button clicked, not setup")
+        //Best way i can think of to solve this at the moment, will cause errors if order is changed. (However this is a static order)
+        editingTomato.name = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
+        editingTomato.description = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
+        resolvingAction(editingTomato)
+        print("save button clicked")
+        //TODO fix multiple creations on save, (exit on save)
+        //TODO make sure item is not blank
     }
     
     
@@ -64,11 +87,22 @@ class TomatoDesignerViewController: UIViewController{
     
     
     func loadTableData(){
-        //TODO: actually make this load data from a saved point
         //setup UI table cells here
-        //looking into MVVM or MVC data setup
-        //
+        viewElements.append(createTextInputCell(editingTomato.name))
+        viewElements.append(createTextInputCell(editingTomato.description))
     }
+    func createTextInputCell(_ placeholder:String) -> UITableViewCell{
+        let cell:UITableViewCell = UITableViewCell()
+        let tf = UITextField(frame: CGRect(x:30, y:5, width:300, height:20))
+        tf.placeholder = placeholder
+        tf.font = UIFont.systemFont(ofSize: 15)
+        
+        cell.addSubview(tf)
+        textFieldElements.append(tf)
+        return cell
+    }
+    
+    
 }
 
 
