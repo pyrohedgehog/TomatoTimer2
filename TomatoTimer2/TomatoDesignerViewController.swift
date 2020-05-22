@@ -49,8 +49,8 @@ class TomatoDesignerViewController: UIViewController{
         print("save button loaded")
     }
     @objc func saveButtonClicked(_ sender: UIButton){
-//        editingTomato.name = (viewElements[0].text == nil || viewElements[0].text!.isEmpty) ? "": viewElements[0].text!
-//        print(viewElements[0].subviews[0].text)
+        
+        
         
         //Best way i can think of to solve this at the moment, will cause errors if order is changed. (However this is a static order)
         editingTomato.name = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
