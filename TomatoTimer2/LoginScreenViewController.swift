@@ -87,7 +87,13 @@ class LoginScreenViewController: UIViewController{
         //used to add new tomatos, passed to the Create Tomato View on construction
         print("new tomato added")
         tomatos.append(tomato)
+        saveTomatoChange(tomato)
+    }
+    func saveTomatoChange(_ tomato:Tomato){
+        
+        //TODO save the new tomato to long term storage
         tableView.reloadData()
+        
     }
 
 }
@@ -109,16 +115,13 @@ extension LoginScreenViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        let tomatoController = EditTomatoViewController(tomatos[indexPath.row])
+        let tomatoController = TomatoDesignerViewController(tomatos[indexPath.row], saveTomatoChange)
         navigationController?.pushViewController(tomatoController, animated: true)
         
     }
     
     
     //TODO: LIST
-    //write cell creator page
-    //write tomato creator button functionalitty
-    //write on click function for already created cells
     //add swipe interface
     
     
