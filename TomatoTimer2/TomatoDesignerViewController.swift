@@ -91,10 +91,18 @@ class TomatoDesignerViewController: UIViewController{
         viewElements.append(createTextInputCell(editingTomato.name))
         viewElements.append(createTextInputCell(editingTomato.description))
     }
+    
     func createTextInputCell(_ placeholder:String) -> UITableViewCell{
         let cell:UITableViewCell = UITableViewCell()
         let tf = UITextField(frame: CGRect(x:30, y:5, width:300, height:20))
         tf.placeholder = placeholder
+        
+        //This is a temporary fix, as a first step solution
+        if(Tomato().name != placeholder || Tomato().description != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
+            tf.text = placeholder
+        }
+        
+        
         tf.font = UIFont.systemFont(ofSize: 15)
         
         cell.addSubview(tf)
