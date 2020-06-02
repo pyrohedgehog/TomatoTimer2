@@ -11,7 +11,7 @@ import UIKit
 class AgendaSelectorViewController: UIViewController {
     var agendas : [TomatoHandler] = []
     var handlerNames : [String] = []
-    
+    var archiveAgenda:TomatoHandler = TomatoHandler("Archive")
     var cellId = "agendaCellId"
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
@@ -24,11 +24,30 @@ class AgendaSelectorViewController: UIViewController {
         view.backgroundColor = .white//may add a darkMode Later if i feel like it
         loadData()
         setupTableView(self.view)
+        setupCreationBarButton(self.view)
         
     }
+    func setupCreationBarButton(_ view:UIView){
+        let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
+        navigationItem.rightBarButtonItem = append
+    }
+    @objc func createButtonClicked(_ sender: UIButton) {
+//        let tomato = Tomato()
+//        let vc = TomatoDesignerViewController(tomato, addTomato)
+//        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    
+    
+    
+    
     let defaults = UserDefaults.standard
     struct keys{
-        static let names            = "handlerNames"
+        /**
+         standard key storage for user defraults keys.
+         */
+        static let names            = "handlerIDS"
         static let previouslyLoaded = "hasAppPreviouslyBeenLaunched"
     }
     func loadData(){
@@ -43,9 +62,15 @@ class AgendaSelectorViewController: UIViewController {
                 agendas.append(element)
             }
         }else{
+            self.archiveAgenda = TomatoHandler("Archive")
+            archiveAgenda.name = "Archived Files"
+            handlerNames.append(archiveAgenda.id)
+            agendas.append(archiveAgenda)//TODO: archive is important... maybe makesure noone deletes it... hell, maybe give it its own page...
+            
+            
             let tutorial = TomatoHandler("Tutorial")
             tutorial.makeTutorial()
-            handlerNames.append(tutorial.name)
+            handlerNames.append(tutorial.id)
             agendas.append(tutorial)
             saveData()
         }
@@ -121,9 +146,7 @@ class AgendaCell: UITableViewCell {
     }
     
     func setText(_ textValue: String){
-        //  nameLabel.text = tomato.name
         textLabel?.text = textValue
-//        detailTextLabel?.text = tomato.description
     }
     
 }
