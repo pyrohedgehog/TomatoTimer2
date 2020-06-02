@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-class Tomato{
+class Tomato : Codable{
     var name: String
     var description: String // description of what it does
     

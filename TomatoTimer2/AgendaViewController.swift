@@ -11,14 +11,26 @@ import UIKit
 //
 //
 //
-class LoginScreenViewController: UIViewController{
+class AgendaViewController: UIViewController{
     //MARK: view variables
     var cellId = "cellId"
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     var tomatos:[Tomato] = []
+    var handler:TomatoHandler
     
-    //load function
+    init(_ tomatoHandler : TomatoHandler){
+        self.handler = tomatoHandler
+        
+        super.init(nibName: nil, bundle: nil)
+        tomatos = tomatoHandler.tomatos
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         safeArea = view.layoutMarginsGuide
@@ -53,8 +65,8 @@ class LoginScreenViewController: UIViewController{
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
+    
         
-        loadTableData()
         tableView.register(TomatoCell.self, forCellReuseIdentifier: cellId)
         
         print("table loaded")
@@ -76,29 +88,24 @@ class LoginScreenViewController: UIViewController{
     
     
     
-    func loadTableData(){
-        //TODO: actually make this load data from a saved point
-        self.tomatos = [Tomato("Hello"),Tomato("world")]
-    }
-    
-    
-    
     func addTomato(_ tomato:Tomato){
         //used to add new tomatos, passed to the Create Tomato View on construction
         print("new tomato added")
         tomatos.append(tomato)
+        handler.tomatos.append(tomato)
         saveTomatoChange(tomato)
     }
     func saveTomatoChange(_ tomato:Tomato){
-        
+        handler.saveAllTomatos()
         //TODO save the new tomato to long term storage
         tableView.reloadData()
+        print("supposidly all tomatos are being saved")
         
     }
 
 }
 
-extension LoginScreenViewController: UITableViewDataSource, UITableViewDelegate {
+extension AgendaViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tomatos.count
