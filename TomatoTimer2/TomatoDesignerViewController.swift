@@ -13,7 +13,7 @@ class TomatoDesignerViewController: UIViewController{
     var cellId = "controlCells"
     
     var safeArea = UILayoutGuide()
-    let tableView = UITableView()
+    let tableView = UITableView() 
     var viewElements : [UITableViewCell] = []
     var textFieldElements : [UITextField] = []
     

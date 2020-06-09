@@ -32,10 +32,24 @@ class AgendaSelectorViewController: UIViewController {
         navigationItem.rightBarButtonItem = append
     }
     @objc func createButtonClicked(_ sender: UIButton) {
-//        let tomato = Tomato()
-//        let vc = TomatoDesignerViewController(tomato, addTomato)
-//        navigationController?.pushViewController(vc, animated: true)
+        let vc = AgendaDesignerViewController(TomatoHandler(generateNewAgendaId()),saveAddedAgenda)
+        navigationController?.pushViewController(vc, animated: true)
         
+    }
+    func generateNewAgendaId() ->String{
+        for x in 0 ... handlerNames.count+2{
+            if(handlerNames.contains(String(x)) == false){
+                return String(x)
+            }
+        }
+        return "this shouldnt happen, but if it does, you'll see this appear in the logs"
+    }
+    
+    func saveAddedAgenda(_ handler:TomatoHandler){
+        handlerNames.append(handler.id)
+        agendas.append(handler)
+        self.saveData()
+        self.tableView.reloadData()
     }
     
     
@@ -65,19 +79,20 @@ class AgendaSelectorViewController: UIViewController {
             self.archiveAgenda = TomatoHandler("Archive")
             archiveAgenda.name = "Archived Files"
             handlerNames.append(archiveAgenda.id)
-            agendas.append(archiveAgenda)//TODO: archive is important... maybe makesure noone deletes it... hell, maybe give it its own page...
+            agendas.append(archiveAgenda)//TODO: archive is important... maybe makesure no one deletes it... hell, maybe give it its own page...
             
             
             let tutorial = TomatoHandler("Tutorial")
             tutorial.makeTutorial()
             handlerNames.append(tutorial.id)
             agendas.append(tutorial)
-            saveData()
         }
+        self.tableView.reloadData()
+        saveData()
     }
     func saveData(){
         /**
-         save the agendas here(only actually save the names here. handle saving smaller data inside of the handler
+         save the agendas here(only actually save the names here. handle saving smaller data inside of the handler)
          */
         defaults.set(handlerNames, forKey: keys.names)
         defaults.set(true, forKey: keys.previouslyLoaded)
@@ -123,11 +138,11 @@ extension AgendaSelectorViewController: UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        let data = agendas[indexPath.row]
+//        let data = agendas[indexPath.row]
+        let data = TomatoHandler(handlerNames[indexPath.row])
         data.loadAllTomatos()
         let handlerController = AgendaViewController(data)
         navigationController?.pushViewController(handlerController, animated: true)
-//        navigationController?.pushViewController(tomatoController, animated: true)
         
     }
 }

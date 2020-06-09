@@ -14,6 +14,7 @@ class TomatoHandler{
     var name    : String = ""
     var id      : String
     var tomatos : [Tomato]
+    var moreInfo : String = ""
     init(_ id : String){
         self.tomatos = []
         self.id = id

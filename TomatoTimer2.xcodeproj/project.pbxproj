@@ -22,6 +22,7 @@
 		4BA6D1BA24786D030071648E /* TomatoSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA6D1B924786D030071648E /* TomatoSelectViewController.swift */; };
 		4BFD8F5A2485873E00C38DBE /* TomatoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFD8F592485873E00C38DBE /* TomatoHandler.swift */; };
 		4BFD8F5C2485897200C38DBE /* AgendaSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFD8F5B2485897200C38DBE /* AgendaSelectorViewController.swift */; };
+		4BFD8F5E2486F03000C38DBE /* AgendaDesignerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFD8F5D2486F03000C38DBE /* AgendaDesignerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		4BA6D1B924786D030071648E /* TomatoSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomatoSelectViewController.swift; sourceTree = "<group>"; };
 		4BFD8F592485873E00C38DBE /* TomatoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomatoHandler.swift; sourceTree = "<group>"; };
 		4BFD8F5B2485897200C38DBE /* AgendaSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaSelectorViewController.swift; sourceTree = "<group>"; };
+		4BFD8F5D2486F03000C38DBE /* AgendaDesignerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaDesignerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				4BA6D1B924786D030071648E /* TomatoSelectViewController.swift */,
 				4BFD8F592485873E00C38DBE /* TomatoHandler.swift */,
 				4BFD8F5B2485897200C38DBE /* AgendaSelectorViewController.swift */,
+				4BFD8F5D2486F03000C38DBE /* AgendaDesignerViewController.swift */,
 			);
 			path = TomatoTimer2;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				4B701116244784B400A73354 /* TomatoTimer2.xcdatamodeld in Sources */,
 				4B7011452447AE5300A73354 /* Tomato.swift in Sources */,
 				4B856AA72475A3D900E4DC40 /* TomatoDesignerViewController.swift in Sources */,
+				4BFD8F5E2486F03000C38DBE /* AgendaDesignerViewController.swift in Sources */,
 				4BFD8F5C2485897200C38DBE /* AgendaSelectorViewController.swift in Sources */,
 				4B7011432447ADE500A73354 /* TomatoCell.swift in Sources */,
 				4BA6D1BA24786D030071648E /* TomatoSelectViewController.swift in Sources */,
