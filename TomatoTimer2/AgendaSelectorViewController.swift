@@ -37,6 +37,10 @@ class AgendaSelectorViewController: UIViewController {
         
     }
     func generateNewAgendaId() ->String{
+        /**
+        Creates the ID when the user creates a new agenda
+         should have a better system, but it works
+         */
         for x in 0 ... handlerNames.count+2{
             if(handlerNames.contains(String(x)) == false){
                 return String(x)
@@ -48,7 +52,9 @@ class AgendaSelectorViewController: UIViewController {
     func saveAddedAgenda(_ handler:TomatoHandler){
         handlerNames.append(handler.id)
         agendas.append(handler)
+        handler.saveAllTomatos()
         self.saveData()
+        loadData()
         self.tableView.reloadData()
     }
     
@@ -68,6 +74,7 @@ class AgendaSelectorViewController: UIViewController {
         /**
          load all the stuffs i need to load on launch
          */
+        agendas = []
         self.handlerNames = defaults.stringArray(forKey: keys.names) ?? [String]()
         let previouslyLoaded = defaults.bool(forKey: keys.previouslyLoaded)
         if(previouslyLoaded){
@@ -79,6 +86,7 @@ class AgendaSelectorViewController: UIViewController {
             self.archiveAgenda = TomatoHandler("Archive")
             archiveAgenda.name = "Archived Files"
             handlerNames.append(archiveAgenda.id)
+            archiveAgenda.saveCurrentSave()
             agendas.append(archiveAgenda)//TODO: archive is important... maybe makesure no one deletes it... hell, maybe give it its own page...
             
             
@@ -130,6 +138,7 @@ extension AgendaSelectorViewController: UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //        print("getting cell")
         let agenda = agendas[indexPath.row]
+        agenda.loadAllTomatos()
         let cell = AgendaCell.init(style: .subtitle, reuseIdentifier: "foo")
         cell.setText(agenda.name)
         
@@ -141,6 +150,7 @@ extension AgendaSelectorViewController: UITableViewDataSource, UITableViewDelega
 //        let data = agendas[indexPath.row]
         let data = TomatoHandler(handlerNames[indexPath.row])
         data.loadAllTomatos()
+        print("Name Of: " + data.name)
         let handlerController = AgendaViewController(data)
         navigationController?.pushViewController(handlerController, animated: true)
         
