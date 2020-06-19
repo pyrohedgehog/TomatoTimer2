@@ -121,7 +121,7 @@ class AgendaDesignerViewController: UIViewController {
     
     @objc func saveAction(){
         if(updateEditingHandler()){
-            editingHandler.saveCurrentSave()
+            editingHandler.saveCurrentSave()     
             saveFunc(editingHandler)
             backAction()
         }//else{

@@ -46,6 +46,7 @@ class AgendaViewController: UIViewController{
         let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
         navigationItem.rightBarButtonItem = append
         
+        navigationItem.title = handler.name//title of handler is set as the view title
         
         print("button loaded")
     }
@@ -119,15 +120,29 @@ extension AgendaViewController: UITableViewDataSource, UITableViewDelegate {
         navigationController?.pushViewController(tomatoController, animated: true)
         
     }
-    
+//    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        //swiping right
+//    }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let title = ""
+        let archive = UIContextualAction(style: .normal, title: title, handler: { (action, view, completionHandler) in
+            //setup archiving system here
+            
+            completionHandler(true)
+        })
+        
+        let imageConfig = UIImage.SymbolConfiguration(weight: .semibold)//should make this configurable by user. So i dont have to pick anything besides the default
+        
+        archive.image = UIImage(systemName: "archivebox.fill", withConfiguration: imageConfig)
+        
+        archive.backgroundColor = UIColor(red: 116/256, green: 255/256, blue: 106/256, alpha: 100/256) //i havent picked a colour yet, but i kinda like the gray, but the green seems more fitting. might make a user selection for those
+        //the green was kinda a randomly chosen green.
+        let config = UISwipeActionsConfiguration(actions: [archive])
+        config.performsFirstActionWithFullSwipe = false
+        return config
+    }
     
     //TODO: LIST
     //add swipe interface
-    
-    
-//    func tableView(_ tableView: UITableView,
-//                   heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 200
-//    }
 }
 
