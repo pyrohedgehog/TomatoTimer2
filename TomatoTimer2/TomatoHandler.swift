@@ -85,6 +85,17 @@ class TomatoHandler{
     }
     
     
+    func addTomato(_ tomato:Tomato){
+        //additional information such as time added set here
+        self.tomatos.append(tomato)
+        if(self.id == "Archive"){
+            print("added to archived file")
+        }
+        saveAllTomatos()
+        
+    }
+    
+    
     
     
 }

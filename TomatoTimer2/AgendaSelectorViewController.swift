@@ -151,7 +151,7 @@ extension AgendaSelectorViewController: UITableViewDataSource, UITableViewDelega
         let data = TomatoHandler(handlerNames[indexPath.row])
         data.loadAllTomatos()
         print("Name Of: " + data.name)
-        let handlerController = AgendaViewController(data)
+        let handlerController = AgendaViewController(data, archiveAgenda)
         navigationController?.pushViewController(handlerController, animated: true)
         
     }

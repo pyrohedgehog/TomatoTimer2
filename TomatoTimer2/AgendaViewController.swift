@@ -18,9 +18,11 @@ class AgendaViewController: UIViewController{
     let tableView = UITableView()
     var tomatos:[Tomato] = []
     var handler:TomatoHandler
+    var archive : TomatoHandler
     
-    init(_ tomatoHandler : TomatoHandler){
+    init(_ tomatoHandler : TomatoHandler, _ archive:TomatoHandler){
         self.handler = tomatoHandler
+        self.archive = archive
         
         super.init(nibName: nil, bundle: nil)
         tomatos = tomatoHandler.tomatos
@@ -74,7 +76,7 @@ class AgendaViewController: UIViewController{
     }
         
     @objc func createButtonClicked(_ sender: UIButton) {
-        let tomato = Tomato()
+        let tomato = Tomato(handler.id)
         let vc = TomatoDesignerViewController(tomato, addTomato)
         navigationController?.pushViewController(vc, animated: true)
 
@@ -125,19 +127,22 @@ extension AgendaViewController: UITableViewDataSource, UITableViewDelegate {
 //    }
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let title = ""
-        let archive = UIContextualAction(style: .normal, title: title, handler: { (action, view, completionHandler) in
+        let archiveButton = UIContextualAction(style: .normal, title: title, handler: { (action, view, completionHandler) in
             //setup archiving system here
-            
+            self.archive.addTomato(self.handler.tomatos.remove(at: indexPath.row))
+            self.tomatos.remove(at: indexPath.row)
+            self.handler.saveAllTomatos()
+            self.tableView.reloadData()
             completionHandler(true)
         })
         
         let imageConfig = UIImage.SymbolConfiguration(weight: .semibold)//should make this configurable by user. So i dont have to pick anything besides the default
         
-        archive.image = UIImage(systemName: "archivebox.fill", withConfiguration: imageConfig)
+        archiveButton.image = UIImage(systemName: "archivebox.fill", withConfiguration: imageConfig)
         
-        archive.backgroundColor = UIColor(red: 116/256, green: 255/256, blue: 106/256, alpha: 100/256) //i havent picked a colour yet, but i kinda like the gray, but the green seems more fitting. might make a user selection for those
+        archiveButton.backgroundColor = UIColor(red: 116/256, green: 255/256, blue: 106/256, alpha: 100/256) //i havent picked a colour yet, but i kinda like the gray, but the green seems more fitting. might make a user selection for those
         //the green was kinda a randomly chosen green.
-        let config = UISwipeActionsConfiguration(actions: [archive])
+        let config = UISwipeActionsConfiguration(actions: [archiveButton])
         config.performsFirstActionWithFullSwipe = false
         return config
     }

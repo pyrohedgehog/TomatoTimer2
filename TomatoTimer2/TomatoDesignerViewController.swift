@@ -59,6 +59,7 @@ class TomatoDesignerViewController: UIViewController{
         print("save button clicked")
         //TODO fix multiple creations on save, (exit on save)
         //TODO make sure item is not blank
+        self.navigationController?.popViewController(animated: true)
     }
     
     
@@ -98,7 +99,7 @@ class TomatoDesignerViewController: UIViewController{
         tf.placeholder = placeholder
         
         //This is a temporary fix, as a first step solution
-        if(Tomato().name != placeholder || Tomato().description != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
+        if(Tomato("").name != placeholder || Tomato("").description != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
             tf.text = placeholder
         }
         
