@@ -13,13 +13,13 @@ class AgendaDesignerViewController: UIViewController {
     let blankAgendaInfo = "Click To Add An Optional Agenda Description"
     
     
-    var saveFunc: (_ saveableHandler:TomatoHandler)->()
-    var editingHandler : TomatoHandler
+    var saveFunc: (_ saveableHandler:TaskHandler)->()
+    var editingHandler : TaskHandler
     
     let tableView = UITableView()
     var viewElements: [UITableViewCell] = []
     
-    init(_ editingHandler:TomatoHandler,_ saveAction: @escaping (_ saveableHandler : TomatoHandler)->()){
+    init(_ editingHandler:TaskHandler,_ saveAction: @escaping (_ saveableHandler : TaskHandler)->()){
         saveFunc = saveAction
         self.editingHandler = editingHandler
         super.init(nibName: nil, bundle: nil)
@@ -66,8 +66,8 @@ class AgendaDesignerViewController: UIViewController {
         var cell:UITableViewCell = UITableViewCell()
         var tf = UITextField(frame: CGRect(x:30, y:5, width:320, height:20))
         tf.placeholder = blankAgendaTitle
-        if  !(editingHandler.name == "" || editingHandler.name == blankAgendaTitle){
-            tf.text = editingHandler.name
+        if  !(editingHandler.title == "" || editingHandler.title == blankAgendaTitle){
+            tf.text = editingHandler.title
         }
         tf.font = UIFont.systemFont(ofSize: 15)
         cell.addSubview(tf)
@@ -94,7 +94,7 @@ class AgendaDesignerViewController: UIViewController {
         tf.placeholder = placeholder
         
         //This is a temporary fix, as a first step solution
-        if(Tomato("").name != placeholder || Tomato("").description != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
+        if(Tomato("").title != placeholder || Tomato("").moreInfo != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
             tf.text = placeholder
         }
         
@@ -139,7 +139,7 @@ class AgendaDesignerViewController: UIViewController {
             return false
         }
         
-        editingHandler.name = nameEntered!
+        editingHandler.title = nameEntered!
         
         let infoEntered = dataElements[1].text!//TODO this will cause errors for multy line entry
         editingHandler.moreInfo = infoEntered

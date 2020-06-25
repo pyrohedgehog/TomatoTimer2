@@ -53,8 +53,8 @@ class TomatoDesignerViewController: UIViewController{
         
         
         //Best way i can think of to solve this at the moment, will cause errors if order is changed. (However this is a static order)
-        editingTomato.name = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
-        editingTomato.description = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
+        editingTomato.title = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
+        editingTomato.moreInfo = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
         resolvingAction(editingTomato)
         print("save button clicked")
         //TODO fix multiple creations on save, (exit on save)
@@ -89,8 +89,8 @@ class TomatoDesignerViewController: UIViewController{
     
     func loadTableData(){
         //setup UI table cells here
-        viewElements.append(createTextInputCell(editingTomato.name))
-        viewElements.append(createTextInputCell(editingTomato.description))
+        viewElements.append(createTextInputCell(editingTomato.title))
+        viewElements.append(createTextInputCell(editingTomato.moreInfo))
     }
     
     func createTextInputCell(_ placeholder:String) -> UITableViewCell{
@@ -99,7 +99,7 @@ class TomatoDesignerViewController: UIViewController{
         tf.placeholder = placeholder
         
         //This is a temporary fix, as a first step solution
-        if(Tomato("").name != placeholder || Tomato("").description != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
+        if(Tomato("").title != placeholder || Tomato("").moreInfo != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
             tf.text = placeholder
         }
         

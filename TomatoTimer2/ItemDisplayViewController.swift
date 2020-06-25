@@ -1,20 +1,37 @@
 //
-//  AgendaSelectorViewController.swift
+//  ItemDisplayViewController.swift
 //  TomatoTimer2
 //
-//  Created by jonah wilmsmeyer on 2020-06-01.
+//  Created by jonah wilmsmeyer on 2020-06-23.
 //  Copyright © 2020 jonah wilmsmeyer. All rights reserved.
 //
 
 import UIKit
 
-class AgendaSelectorViewController: UIViewController {
+class ItemDisplayViewController: UIViewController {
+    //First, create a tableView
+    //Create add button
+    //replace AgendaViewController and AgendaSelectorViewController with this one class
+    //
     var agendas : TaskHandler = TaskHandler("MainPage")
-    var handlerNames : [String] = []
+    var handlerNames : [String] = []//i want to remove this, but havent gotten to it yet
     var archiveAgenda:TaskHandler = TaskHandler("Archive")
     var cellId = "agendaCellId"
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
+    
+    init(_ handlerString: String){
+        self.agendas = TaskHandler(handlerString)
+        super.init(nibName: nil, bundle: nil)
+    }
+    init(_ taskHandler: TaskHandler){
+        self.agendas = taskHandler
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +55,7 @@ class AgendaSelectorViewController: UIViewController {
     }
     func generateNewAgendaId() ->String{
         /**
-        Creates the ID when the user creates a new agenda
+         Creates the ID when the user creates a new agenda
          should have a better system, but it works
          */
         for x in 0 ... handlerNames.count+2{
@@ -46,7 +63,7 @@ class AgendaSelectorViewController: UIViewController {
                 return String(x)
             }
         }
-        return "this shouldnt happen, but if it does, you'll see this appear in the logs"
+        return "this shouldnt happen, but if it does, you'll see this appear in the logs. If this is in logs, fix your generateNewAgendaId function"
     }
     
     func saveAddedAgenda(_ handler:TaskHandler){
@@ -88,41 +105,6 @@ class AgendaSelectorViewController: UIViewController {
         }
         self.tableView.reloadData()
     }
-//    func loadData(){
-//        /**
-//         load all the stuffs i need to load on launch
-//         */
-//        agendas = {}
-//        self.handlerNames = defaults.stringArray(forKey: keys.names) ?? [String]()
-//        let previouslyLoaded = defaults.bool(forKey: keys.previouslyLoaded)
-//        if(previouslyLoaded){
-//            for foo in handlerNames{
-//                let element = TaskHandler(foo)
-//                agendas.append(element)
-//            }
-//        }else{
-//            self.archiveAgenda = TaskHandler("Archive")
-//            archiveAgenda.title = "Archived Files"
-//            handlerNames.append(archiveAgenda.id)
-//            archiveAgenda.saveCurrentSave()
-//            agendas.append(archiveAgenda)//TODO: archive is important... maybe makesure no one deletes it... hell, maybe give it its own page...
-//
-//
-//            let tutorial = TaskHandler("Tutorial")
-//            tutorial.makeTutorial()
-//            handlerNames.append(tutorial.id)
-//            agendas.append(tutorial)
-//        }
-//        self.tableView.reloadData()
-//        saveData()
-//    }
-//    func saveData(){
-//        /**
-//         save the agendas here(only actually save the names here. handle saving smaller data inside of the handler)
-//         */
-//        defaults.set(handlerNames, forKey: keys.names)
-//        defaults.set(true, forKey: keys.previouslyLoaded)
-//    }
     func saveData(){
         agendas.saveCurrentSave()
         defaults.set(true, forKey: keys.previouslyLoaded)
@@ -145,52 +127,32 @@ class AgendaSelectorViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
-//        loadTableData()
+        //        loadTableData()
         tableView.register(TomatoCell.self, forCellReuseIdentifier: cellId)
     }
 }
 
 
-extension AgendaSelectorViewController: UITableViewDataSource, UITableViewDelegate {
+extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.agendas.tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let agenda = agendas.tasks[indexPath.row]
-//        agenda.loadAllTomatos()
-        let cell = AgendaCell.init(style: .subtitle, reuseIdentifier: "foo")
-        cell.setText(agenda.title)
-        
+        let task = agendas.tasks[indexPath.row]
+//        let cell = AgendaCell.init(style: .subtitle, reuseIdentifier: "foo")
+//
+//        cell.setText(agenda.title)
+        let cell = TaskElementCell.init()
+        cell.setText(task)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-//        let data = TaskHandler(handlerNames[indexPath.row])
-        let data = agendas.tasks[indexPath.row]
-//        let handlerController = AgendaViewController(data, archiveAgenda)
-        navigationController?.pushViewController(data.onShortClick(), animated: true)
+        let data = agendas.tasks[indexPath.row].onShortClick()
+        navigationController?.pushViewController(data, animated: true)
         
     }
-}
-class AgendaCell: UITableViewCell {
-    // @IBOutlet weak var nameLabel: UILabel!
-    var nameLabel = UILabel()
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-    }
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-    
-    func setText(_ textValue: String){
-        textLabel?.text = textValue
-    }
-    
 }

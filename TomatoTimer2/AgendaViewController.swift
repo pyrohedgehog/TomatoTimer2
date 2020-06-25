@@ -17,15 +17,15 @@ class AgendaViewController: UIViewController{
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     var tomatos:[Tomato] = []
-    var handler:TomatoHandler
-    var archive : TomatoHandler
+    var handler:TaskHandler
+    var archive : TaskHandler
     
-    init(_ tomatoHandler : TomatoHandler, _ archive:TomatoHandler){
+    init(_ tomatoHandler : TaskHandler, _ archive:TaskHandler){
         self.handler = tomatoHandler
         self.archive = archive
         
         super.init(nibName: nil, bundle: nil)
-        tomatos = tomatoHandler.tomatos
+        tomatos = tomatoHandler.tasks as! [Tomato]
     }
     
     required init?(coder: NSCoder) {
@@ -48,7 +48,7 @@ class AgendaViewController: UIViewController{
         let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
         navigationItem.rightBarButtonItem = append
         
-        navigationItem.title = handler.name//title of handler is set as the view title
+        navigationItem.title = handler.title//title of handler is set as the view title
         
         print("button loaded")
     }
@@ -88,7 +88,7 @@ class AgendaViewController: UIViewController{
         //used to add new tomatos, passed to the Create Tomato View on construction
         print("new tomato added")
         tomatos.append(tomato)
-        handler.tomatos.append(tomato)
+        handler.tasks.append(tomato)
         saveTomatoChange(tomato)
     }
     func saveTomatoChange(_ tomato:Tomato){
@@ -129,7 +129,7 @@ extension AgendaViewController: UITableViewDataSource, UITableViewDelegate {
         let title = ""
         let archiveButton = UIContextualAction(style: .normal, title: title, handler: { (action, view, completionHandler) in
             //setup archiving system here
-            self.archive.addTomato(self.handler.tomatos.remove(at: indexPath.row))
+            self.archive.addTomato(self.handler.tasks.remove(at: indexPath.row) as! Tomato)
             self.tomatos.remove(at: indexPath.row)
             self.handler.saveAllTomatos()
             self.tableView.reloadData()

@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 
-//protocol TaskElement{
-//
-//}
+protocol TaskElement : Codable{
+    var title : String { get }
+    var moreInfo : String { get}
+    func onShortClick() -> UIViewController
+}
 //extension TaskElement {
 //
 //
@@ -27,11 +29,15 @@ class TaskElementCell : UITableViewCell{
     }
     func setText(tomato: Tomato){
         //  nameLabel.text = tomato.name
-        textLabel?.text = tomato.name
-        detailTextLabel?.text = tomato.description
+        textLabel?.text = tomato.title
+        detailTextLabel?.text = tomato.moreInfo
     }
-    func setText(agenda : TomatoHandler){
-        textLabel?.text = agenda.name
+    func setText(agenda : TaskHandler){
+        textLabel?.text = agenda.title
         detailTextLabel?.text = agenda.moreInfo
+    }
+    func setText(_ task: TaskElement){
+        textLabel?.text = task.title
+        detailTextLabel?.text = task.moreInfo
     }
 }

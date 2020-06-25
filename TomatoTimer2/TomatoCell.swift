@@ -24,8 +24,8 @@ class TomatoCell: UITableViewCell {
     
     func setText(_ tomato: Tomato){
       //  nameLabel.text = tomato.name
-        textLabel?.text = tomato.name
-        detailTextLabel?.text = tomato.description
+        textLabel?.text = tomato.title
+        detailTextLabel?.text = tomato.moreInfo
     }
     
 }
