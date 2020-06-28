@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
 //        window?.rootViewController = LoginScreenViewController()    // your ViewController
-        window?.rootViewController = UINavigationController(rootViewController: AgendaSelectorViewController())
+        window?.rootViewController = UINavigationController(rootViewController: ItemDisplayViewController("MainPage"))
         window?.makeKeyAndVisible()
     }
 

@@ -20,6 +20,7 @@ class ItemDisplayViewController: UIViewController {
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     
+    
     init(_ handlerString: String){
         self.agendas = TaskHandler(handlerString)
         super.init(nibName: nil, bundle: nil)

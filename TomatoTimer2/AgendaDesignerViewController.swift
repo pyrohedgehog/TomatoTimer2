@@ -124,9 +124,9 @@ class AgendaDesignerViewController: UIViewController {
             editingHandler.saveCurrentSave()     
             saveFunc(editingHandler)
             backAction()
-        }//else{
-            //Throw Error somehow
-        //}
+        }else{
+            print("error occured during save")
+        }
     }
     
     func updateEditingHandler() -> Bool{
