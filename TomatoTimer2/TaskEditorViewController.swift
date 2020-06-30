@@ -1,35 +1,33 @@
 //
-//  TomatoDesignerViewController.swift
+//  TaskEditorViewController.swift
 //  TomatoTimer2
 //
-//  Created by jonah wilmsmeyer on 2020-05-20.
+//  Created by jonah wilmsmeyer on 2020-06-28.
 //  Copyright © 2020 jonah wilmsmeyer. All rights reserved.
 //
 
 import UIKit
 
-class TomatoDesignerViewController: UIViewController{
+class TaskEditorViewController: UIViewController {
     //MARK: view variables
     var cellId = "controlCells"
     
     var safeArea = UILayoutGuide()
-    let tableView = UITableView() 
+    let tableView = UITableView()
     var viewElements : [UITableViewCell] = []
     var textFieldElements : [UITextField] = []
     
-    var resolvingAction:(_ tomato:Tomato)->()
-    var editingTomato :Tomato
+    var resolvingAction:(_ task:TaskElement)->()
+    var editingTask :TaskElement
     
-    init(_ inputTomato:Tomato, _ resolvingAction: @escaping (_ tomato:Tomato)->()){
+    init(_ inputTask:TaskElement, _ resolvingAction: @escaping (_ task:TaskElement)->()){
         self.resolvingAction = resolvingAction
-        editingTomato = inputTomato
+        editingTask = inputTask
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
     
     //load function
     override func viewDidLoad() {
@@ -50,19 +48,14 @@ class TomatoDesignerViewController: UIViewController{
     }
     @objc func saveButtonClicked(_ sender: UIButton){
         
-        
-        
         //Best way i can think of to solve this at the moment, will cause errors if order is changed. (However this is a static order)
-        editingTomato.title = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
-        editingTomato.moreInfo = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
-        resolvingAction(editingTomato)
+        editingTask.title = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
+        editingTask.moreInfo = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
+        resolvingAction(editingTask)
         print("save button clicked")
-        //TODO fix multiple creations on save, (exit on save)
         //TODO make sure item is not blank
         self.navigationController?.popViewController(animated: true)
     }
-    
-    
     func setupTableView(_ inputView: UIView){
         /**
          Setup the table
@@ -89,8 +82,8 @@ class TomatoDesignerViewController: UIViewController{
     
     func loadTableData(){
         //setup UI table cells here
-        viewElements.append(createTextInputCell(editingTomato.title))
-        viewElements.append(createTextInputCell(editingTomato.moreInfo))
+        viewElements.append(createTextInputCell(editingTask.title))
+        viewElements.append(createTextInputCell(editingTask.moreInfo))
     }
     
     func createTextInputCell(_ placeholder:String) -> UITableViewCell{
@@ -119,7 +112,7 @@ class TomatoDesignerViewController: UIViewController{
 
 
 
-extension TomatoDesignerViewController: UITableViewDataSource, UITableViewDelegate {
+extension TaskEditorViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewElements.count
@@ -135,6 +128,5 @@ extension TomatoDesignerViewController: UITableViewDataSource, UITableViewDelega
         
     }
     
-   
+    
 }
-

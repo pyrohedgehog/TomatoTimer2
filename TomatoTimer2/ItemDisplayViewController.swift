@@ -13,9 +13,9 @@ class ItemDisplayViewController: UIViewController {
     //Create add button
     //replace AgendaViewController and AgendaSelectorViewController with this one class
     //
-    var agendas : TaskHandler = TaskHandler("MainPage")
+    var agendas : TaskHandler
     var handlerNames : [String] = []//i want to remove this, but havent gotten to it yet
-    var archiveAgenda:TaskHandler = TaskHandler("Archive")
+    var archiveAgenda:TaskHandler
     var cellId = "agendaCellId"
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
@@ -23,9 +23,11 @@ class ItemDisplayViewController: UIViewController {
     
     init(_ handlerString: String){
         self.agendas = TaskHandler(handlerString)
+        self.archiveAgenda = StartScreenViewController.archive
         super.init(nibName: nil, bundle: nil)
     }
-    init(_ taskHandler: TaskHandler){
+    init(_ taskHandler:TaskHandler, _ archive:TaskHandler){
+        self.archiveAgenda = archive
         self.agendas = taskHandler
         super.init(nibName: nil, bundle: nil)
     }
@@ -90,20 +92,7 @@ class ItemDisplayViewController: UIViewController {
     }
     func loadData(){
         agendas.loadPreviousSave()
-        let previouslyLoaded = defaults.bool(forKey: keys.previouslyLoaded)
-        if(previouslyLoaded==false){
-            self.archiveAgenda = TaskHandler("Archive")
-            archiveAgenda.title = "Archived Files"
-            handlerNames.append(archiveAgenda.id)
-            archiveAgenda.saveCurrentSave()
-            agendas.tasks.append(archiveAgenda)//TODO: archive is important... maybe makesure no one deletes it... hell, maybe give it its own page...
-            
-            
-            let tutorial = TaskHandler("Tutorial")
-            tutorial.makeTutorial()
-            handlerNames.append(tutorial.id)
-            agendas.tasks.append(tutorial)
-        }
+        
         self.tableView.reloadData()
     }
     func saveData(){
@@ -129,7 +118,7 @@ class ItemDisplayViewController: UIViewController {
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
         //        loadTableData()
-        tableView.register(TomatoCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
     }
 }
 
@@ -147,6 +136,7 @@ extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate 
 //        cell.setText(agenda.title)
         let cell = TaskElementCell.init()
         cell.setText(task)
+        
         return cell
     }
     
@@ -155,5 +145,33 @@ extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate 
         let data = agendas.tasks[indexPath.row].onShortClick()
         navigationController?.pushViewController(data, animated: true)
         
+    }
+    
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        /**
+         swipe from the right features
+         */
+        let title = ""
+        let archiveButton = UIContextualAction(style: .normal, title: title, handler: { (action, view, completionHandler) in
+            //setup archiving system here
+            self.archiveAgenda.addTask(self.agendas.tasks.remove(at: indexPath.row))
+//            self.tomatos.remove(at: indexPath.row)
+            self.archiveAgenda.saveCurrentSave()
+            self.agendas.saveAllTomatos()
+            self.tableView.reloadData()
+            
+            completionHandler(true)
+        })
+        
+        let imageConfig = UIImage.SymbolConfiguration(weight: .semibold)//should make this configurable by user. So i dont have to pick anything besides the default
+        
+        archiveButton.image = UIImage(systemName: "archivebox.fill", withConfiguration: imageConfig)
+        
+        archiveButton.backgroundColor = UIColor(red: 116/256, green: 255/256, blue: 106/256, alpha: 100/256) //i havent picked a colour yet, but i kinda like the gray, but the green seems more fitting. might make a user selection for those
+        //the green was kinda a randomly chosen green.
+        let config = UISwipeActionsConfiguration(actions: [archiveButton])
+        config.performsFirstActionWithFullSwipe = false
+        return config
     }
 }

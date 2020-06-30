@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 protocol TaskElement : Codable{
-    var title : String { get }
-    var moreInfo : String { get}
+    var title : String { get set}
+    var moreInfo : String { get set}
     func onShortClick() -> UIViewController
 }
 //extension TaskElement {
@@ -19,22 +19,22 @@ protocol TaskElement : Codable{
 //
 //}
 class TaskElementCell : UITableViewCell{
+    init(){
+        super.init(style: .subtitle, reuseIdentifier: "taskCell")
+    }
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder: NSCoder) {//required
+        fatalError("init(coder:) has not been implemented")
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-    func setText(tomato: Tomato){
-        //  nameLabel.text = tomato.name
-        textLabel?.text = tomato.title
-        detailTextLabel?.text = tomato.moreInfo
-    }
-    func setText(agenda : TaskHandler){
-        textLabel?.text = agenda.title
-        detailTextLabel?.text = agenda.moreInfo
     }
     func setText(_ task: TaskElement){
         textLabel?.text = task.title

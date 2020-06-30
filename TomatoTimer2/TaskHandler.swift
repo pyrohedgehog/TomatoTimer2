@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class TaskHandler :Codable, TaskElement{
     func onShortClick() -> UIViewController {
-        let controller = ItemDisplayViewController(self)
+        let controller = ItemDisplayViewController(self, StartScreenViewController.archive)
         return controller
     }
     
@@ -21,6 +21,7 @@ class TaskHandler :Codable, TaskElement{
     var id      : String
     var tasks : [TaskElement]
     var moreInfo : String = ""
+    
     init(_ id : String){
         self.tasks = []
         self.id = id
@@ -57,7 +58,7 @@ class TaskHandler :Codable, TaskElement{
         /**
          makes the tutorial TomatoHandler. Only call if its the first time the user makes an "account"
          */
-        self.tasks = [Tomato("Hello"),Tomato("world")]
+        self.tasks = [Tomato("Hello", "click on tasks to edit them", self.id),Tomato("world","click on tasks to edit them", self.id)]
         self.title = "Tutorial"
         self.saveCurrentSave()
     }
@@ -93,7 +94,7 @@ class TaskHandler :Codable, TaskElement{
     }
     
     func loadAllTomatos(){
-        print("loading all tomatos")
+//        print("loading all tomatos")
         tasks = []
         let tomatoCount = defaults.integer(forKey: self.id+keys.tomatosCount)
         for index in 0..<tomatoCount{
@@ -116,5 +117,13 @@ class TaskHandler :Codable, TaskElement{
             print("added to archived file")
         }
         saveAllTomatos()
+    }
+    func addTask(_ task:TaskElement){
+        self.tasks.append(task)
+        saveAllTomatos()
+//        saveCurrentSave()
+        if(self.id == "Archive"){
+            print("added to archived file")
+        }
     }
 }

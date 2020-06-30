@@ -54,7 +54,7 @@ class AgendaDesignerViewController: UIViewController {
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
         loadTableData()
-        tableView.register(TomatoCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
         
         print("table loaded")
     }

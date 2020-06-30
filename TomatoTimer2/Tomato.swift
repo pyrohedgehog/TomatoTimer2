@@ -7,6 +7,7 @@ class Tomato : Codable, TaskElement{
     }
     func resolveAction(_ tomato : Tomato){
         //TODO Setup the save function...
+        print("")
     }
     
     var title: String

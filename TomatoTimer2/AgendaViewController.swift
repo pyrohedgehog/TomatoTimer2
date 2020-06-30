@@ -70,7 +70,7 @@ class AgendaViewController: UIViewController{
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
     
         
-        tableView.register(TomatoCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
         
         print("table loaded")
     }
@@ -110,7 +110,7 @@ extension AgendaViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        print("getting cell")
         let tomato = tomatos[indexPath.row]
-        let cell = TomatoCell.init(style: .subtitle, reuseIdentifier: "foo")
+        let cell = TaskElementCell()
         cell.setText(tomato)
         
         return cell
