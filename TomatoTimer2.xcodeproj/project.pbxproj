@@ -22,6 +22,7 @@
 		4B701131244784B500A73354 /* TomatoTimer2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B701130244784B500A73354 /* TomatoTimer2UITests.swift */; };
 		4B70113F2447977700A73354 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B70113E2447977700A73354 /* Main.storyboard */; };
 		4B7011452447AE5300A73354 /* Tomato.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7011442447AE5300A73354 /* Tomato.swift */; };
+		4B74CA9724AB91830092D331 /* TaskDesignerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B74CA9624AB91830092D331 /* TaskDesignerViewController.swift */; };
 		4B856AA72475A3D900E4DC40 /* TomatoDesignerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B856AA62475A3D900E4DC40 /* TomatoDesignerViewController.swift */; };
 		4BA23411249D16F200A2EECE /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA23410249D16F200A2EECE /* CloudKit.framework */; };
 		4BA6D1BA24786D030071648E /* TomatoSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA6D1B924786D030071648E /* TomatoSelectViewController.swift */; };
@@ -67,6 +68,7 @@
 		4B701132244784B500A73354 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B70113E2447977700A73354 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		4B7011442447AE5300A73354 /* Tomato.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tomato.swift; sourceTree = "<group>"; };
+		4B74CA9624AB91830092D331 /* TaskDesignerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDesignerViewController.swift; sourceTree = "<group>"; };
 		4B856AA62475A3D900E4DC40 /* TomatoDesignerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomatoDesignerViewController.swift; sourceTree = "<group>"; };
 		4BA2340E249D16EA00A2EECE /* TomatoTimer2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomatoTimer2.entitlements; sourceTree = "<group>"; };
 		4BA23410249D16F200A2EECE /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -142,6 +144,7 @@
 				4B6D09BB24A2569F00340783 /* ItemDisplayViewController.swift */,
 				4B6D09BD24A445A900340783 /* TaskHandler.swift */,
 				4B1FDB4B24A927390042D4BB /* TaskEditorViewController.swift */,
+				4B74CA9624AB91830092D331 /* TaskDesignerViewController.swift */,
 			);
 			path = TomatoTimer2;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B74CA9724AB91830092D331 /* TaskDesignerViewController.swift in Sources */,
 				4B701116244784B400A73354 /* TomatoTimer2.xcdatamodeld in Sources */,
 				4B145B2624A113ED00A00F63 /* TaskElement.swift in Sources */,
 				4B1FDB4C24A927390042D4BB /* TaskEditorViewController.swift in Sources */,
