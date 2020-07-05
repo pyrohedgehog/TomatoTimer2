@@ -21,10 +21,13 @@ class TaskDesignerViewController: UIViewController {
     
     let tableView = UITableView()
     var viewElements: [UITableViewCell] = []
+    var isTaskHandler = false
     
-    init(_ editingHandler:TaskElement,_ saveAction: @escaping (_ saveAbleTask : TaskElement)->()){
+    init(_ editingTask:TaskElement,_ saveAction: @escaping (_ saveAbleTask : TaskElement)->()){
+        print("TaskDesignViewControllerLoaded")
+        isTaskHandler = editingTask is TaskHandler
         saveFunc = saveAction
-        self.editingTask = editingHandler
+        self.editingTask = editingTask
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -58,10 +61,11 @@ class TaskDesignerViewController: UIViewController {
         
         loadTableData()
         tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
+        tableView.backgroundColor = .white
         
         print("table loaded")
     }
-    var dataElements:[UITextField] = []//the point
+    var dataElements:[UITextField] = []//the data points
     func loadTableData(){
         /**
          heres where the different actual data/ UI for the cells is setup. Still Using the method of view cells array and data access array.
@@ -71,8 +75,15 @@ class TaskDesignerViewController: UIViewController {
         tf.placeholder = defaultTaskTitle
         if  !(editingTask.title == "" || editingTask.title == defaultTaskTitle){
             tf.text = editingTask.title
+            tf.textColor = .black
+        }else{
+            tf.textColor = .gray
         }
         tf.font = UIFont.systemFont(ofSize: 15)
+        
+        tf.backgroundColor = .white
+        cell.backgroundColor = .white
+        
         cell.addSubview(tf)
         dataElements.append(tf)
         viewElements.append(cell)
@@ -84,12 +95,35 @@ class TaskDesignerViewController: UIViewController {
         tf.placeholder = defaultTaskInfo
         if  !(editingTask.moreInfo == "" || editingTask.moreInfo == defaultTaskInfo){
             tf.text = editingTask.moreInfo
+            tf.textColor = .black
+        }else{
+            tf.textColor = .gray
         }
+        tf.backgroundColor = .white
+        cell.backgroundColor = .white
+        
+        
         tf.font = UIFont.systemFont(ofSize: 15)
         cell.addSubview(tf)
         dataElements.append(tf)
         viewElements.append(cell)
         
+        
+        cell = UITableViewCell()
+        let switchView = UISwitch(frame: .zero)
+        switchView.setOn(isTaskHandler, animated: true)
+        switchView.tag = 2//hardcoding the second index of the array, big problem if i want to reorder it...
+        switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+        switchView.backgroundColor = .white
+        cell.accessoryView = switchView
+        cell.backgroundColor = .white
+        viewElements.append(cell)
+        
+        
+    }
+    
+    @objc func switchChanged(_ sender : UISwitch!){
+        isTaskHandler = !(isTaskHandler)
     }
     func createTextInputCell(_ placeholder:String) -> UITableViewCell{
         let cell:UITableViewCell = UITableViewCell()
@@ -97,12 +131,16 @@ class TaskDesignerViewController: UIViewController {
         tf.placeholder = placeholder
         
         //This is a temporary fix, as a first step solution
-        if(Tomato("").title != placeholder || Tomato("").moreInfo != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
+        if(editingTask.title != placeholder && editingTask.moreInfo != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
             tf.text = placeholder
         }
         
         
         tf.font = UIFont.systemFont(ofSize: 15)
+        
+        cell.backgroundColor = .white
+        tf.textColor = .black
+        
         
         cell.addSubview(tf)
         dataElements.append(tf)
@@ -124,6 +162,21 @@ class TaskDesignerViewController: UIViewController {
     
     @objc func saveAction(){
         if(updateEditingHandler()){
+            if((editingTask is TaskHandler) != isTaskHandler){//if state is switched
+                if(editingTask is TaskHandler){
+                    let newEditing:Tomato = Tomato(editingTask.title, editingTask.moreInfo)
+                    (editingTask as! TaskHandler).deleteAllTasks()
+                    editingTask = newEditing
+                }else{
+                    let id = String(Int.random(in: 0 ..< 1000))//TODO replace this with a better option! THIS WILL BREAK
+                    let newEditing:TaskHandler = TaskHandler(id)
+                    newEditing.title = editingTask.title
+                    newEditing.moreInfo = editingTask.moreInfo
+                    editingTask = newEditing
+                }
+            }
+            
+            
             saveFunc(editingTask)
             backAction()
         }else{

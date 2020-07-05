@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 class Tomato : Codable, TaskElement{
     func onShortClick() -> UIViewController {
-        return TomatoDesignerViewController(self, resolveAction)
+        return TaskDesignerViewController(self, resolveAction)
         
     }
-    func resolveAction(_ tomato : Tomato){
+    func resolveAction(_ tomato : TaskElement){
         //TODO Setup the save function...
         print("")
     }
@@ -13,23 +13,13 @@ class Tomato : Codable, TaskElement{
     var title: String
     var moreInfo: String // description of what it does
     
-    var originId: String//just the first handler to spawn the tomato. Useful for future stats per assignment based on archived tomatos
-    
-    
-    init(_ name:String, _ origin:String){
-        self.originId = origin
+    init(_ name:String){
         self.title = name
-        self.moreInfo = "Click To Enter Description"
-    }
-    init(_ origin:String){
-        self.title = "Click To Enter A Title"
-        self.moreInfo = "Click To Enter Description"
-        self.originId = origin
+        self.moreInfo = "Click To Add More info!"
     }
     
-    init(_ name:String, _ description: String, _ origin:String){
+    init(_ name:String, _ moreInfo:String){
+        self.moreInfo = moreInfo
         self.title = name
-        self.moreInfo = description
-        self.originId = origin
     }
 }

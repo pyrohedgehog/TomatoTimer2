@@ -19,11 +19,22 @@ protocol TaskElement : Codable{
 //
 //}
 class TaskElementCell : UITableViewCell{
+    let backgroundColourValue : UIColor = .white
+    let textColour : UIColor = .black
+    let detailColour : UIColor = .gray
+    
+    
     init(){
         super.init(style: .subtitle, reuseIdentifier: "taskCell")
+        self.backgroundColor = backgroundColourValue
+        self.textLabel?.textColor = textColour
+        self.detailTextLabel?.textColor = detailColour
     }
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.backgroundColor = backgroundColourValue
+        self.textLabel?.textColor = textColour
+        self.detailTextLabel?.textColor = detailColour
     }
     
     required init?(coder: NSCoder) {//required

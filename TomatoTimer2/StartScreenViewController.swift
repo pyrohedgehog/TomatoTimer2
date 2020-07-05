@@ -24,11 +24,14 @@ class StartScreenViewController: UIViewController {
     override func viewDidLoad() {
         
         let mainPage = TaskHandler("MainPage")
+        mainPage.title = "Home Page"
+        mainPage.moreInfo = "   "
         
         
         let defaults = UserDefaults.standard
-        let previouslyLoaded = defaults.bool(forKey: "hasAppPreviouslyBeenLaunched")
+        let previouslyLoaded = defaults.bool(forKey: "hasAppPreviouslyBeenLaunched")//could be done by checking MainPage's existance, but this is more clear
         if(previouslyLoaded==false){
+            mainPage.title = "Home Page"
             mainPage.addTask(StartScreenViewController.archive)
             StartScreenViewController.archive.saveCurrentSave()
             

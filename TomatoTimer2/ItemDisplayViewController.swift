@@ -48,11 +48,14 @@ class ItemDisplayViewController: UIViewController {
         
     }
     func setupCreationBarButton(_ view:UIView){
+        if(agendas.title != "Click to define Name"){
+            navigationItem.title = agendas.title
+        }
         let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
         navigationItem.rightBarButtonItem = append
     }
     @objc func createButtonClicked(_ sender: UIButton) {
-        let vc = AgendaDesignerViewController(TaskHandler(generateNewAgendaId()),saveAddedAgenda)
+        let vc = TaskDesignerViewController(TaskHandler(generateNewAgendaId()),saveAddedAgenda)
         navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -69,10 +72,10 @@ class ItemDisplayViewController: UIViewController {
         return "this shouldnt happen, but if it does, you'll see this appear in the logs. If this is in logs, fix your generateNewAgendaId function"
     }
     
-    func saveAddedAgenda(_ handler:TaskHandler){
-        handlerNames.append(handler.id)
+    func saveAddedAgenda(_ handler:TaskElement){
+//        handlerNames.append(handler.id)
         agendas.tasks.append(handler)
-        handler.saveAllTomatos()
+//        handler.saveAllTomatos()
         self.saveData()
         loadData()
         self.tableView.reloadData()
@@ -106,6 +109,7 @@ class ItemDisplayViewController: UIViewController {
          Setup the table
          */
         let view = inputView
+        tableView.backgroundColor = .white
         var safeArea  = UILayoutGuide()
         safeArea = view.layoutMarginsGuide
         tableView.delegate = self
@@ -139,6 +143,7 @@ extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate 
         
         return cell
     }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)

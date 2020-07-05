@@ -9,6 +9,9 @@
 import UIKit
 
 class TaskEditorViewController: UIViewController {
+    /**
+     display more info on the task, Long click from a taskHandler, and a short click from a tomato
+     */
     //MARK: view variables
     var cellId = "controlCells"
     

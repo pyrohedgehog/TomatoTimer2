@@ -22,6 +22,7 @@ class TaskHandler :Codable, TaskElement{
     var tasks : [TaskElement]
     var moreInfo : String = ""
     
+    
     init(_ id : String){
         self.tasks = []
         self.id = id
@@ -45,9 +46,9 @@ class TaskHandler :Codable, TaskElement{
         }
     }
     func saveCurrentSave(){
-        if (title == ""){
-            title = "Click to define Name"
-        }
+//        if (title == ""){
+//            title = "Click to define Name"
+//        }
         defaults.set(true, forKey: id + keys.hasIdBeenSavedBefore)
         defaults.set(title, forKey: id + keys.nameSave)
         defaults.set(moreInfo, forKey: id + keys.moreInfoSave)
@@ -58,7 +59,7 @@ class TaskHandler :Codable, TaskElement{
         /**
          makes the tutorial TomatoHandler. Only call if its the first time the user makes an "account"
          */
-        self.tasks = [Tomato("Hello", "click on tasks to edit them", self.id),Tomato("world","click on tasks to edit them", self.id)]
+        self.tasks = [Tomato("Hello", "click on tasks to edit them"),Tomato("world","click on tasks to edit them")]
         self.title = "Tutorial"
         self.saveCurrentSave()
     }
@@ -125,5 +126,13 @@ class TaskHandler :Codable, TaskElement{
         if(self.id == "Archive"){
             print("added to archived file")
         }
+    }
+    func deleteAllTasks(){
+        for x in tasks{
+            if(x is TaskHandler){
+                (x as! TaskHandler).deleteAllTasks()
+            }
+        }
+        tasks.removeAll()
     }
 }
