@@ -21,12 +21,11 @@ class StartScreenViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func viewDidLoad() {
-        
         let mainPage = TaskHandler("MainPage")
         mainPage.title = "Home Page"
         mainPage.moreInfo = "   "
-        
         
         let defaults = UserDefaults.standard
         let previouslyLoaded = defaults.bool(forKey: "hasAppPreviouslyBeenLaunched")//could be done by checking MainPage's existance, but this is more clear
@@ -42,9 +41,6 @@ class StartScreenViewController: UIViewController {
         }
         
         let view = ItemDisplayViewController(mainPage,StartScreenViewController.archive)
-//        navigationController?.pushViewController(view, animated: true)
         navigationController?.setViewControllers([view], animated: true)
     }
-    
-
 }

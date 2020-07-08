@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 class Tomato : Codable, TaskElement{
     func onShortClick() -> UIViewController {
-        return TaskDesignerViewController(self, resolveAction)
+        return TaskEditorViewController(self, resolveAction)
         
     }
     func resolveAction(_ tomato : TaskElement){
-        //TODO Setup the save function...
+        //TODO: Setup the save function...
         print("")
     }
     

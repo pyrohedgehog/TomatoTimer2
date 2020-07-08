@@ -9,26 +9,26 @@
 import UIKit
 
 class ItemDisplayViewController: UIViewController {
-    //First, create a tableView
-    //Create add button
-    //replace AgendaViewController and AgendaSelectorViewController with this one class
-    //
-    var agendas : TaskHandler
-    var handlerNames : [String] = []//i want to remove this, but havent gotten to it yet
-    var archiveAgenda:TaskHandler
-    var cellId = "agendaCellId"
+    //replaces AgendaViewController and AgendaSelectorViewController with this one class
+    var agendas: TaskHandler
+    var handlerNames: [String] = []//i want to remove this, but havent gotten to it yet
+    var archiveAgenda: TaskHandler
+    let cellId = "agendaCellId"
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
-    
+    var colorPattern: ColorPattern
     
     init(_ handlerString: String){
         self.agendas = TaskHandler(handlerString)
         self.archiveAgenda = StartScreenViewController.archive
+        self.colorPattern = ColorPattern.getColor(agendas.colorPattern)
         super.init(nibName: nil, bundle: nil)
     }
+    
     init(_ taskHandler:TaskHandler, _ archive:TaskHandler){
         self.archiveAgenda = archive
         self.agendas = taskHandler
+        self.colorPattern = ColorPattern.getColor(agendas.colorPattern)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,22 +40,20 @@ class ItemDisplayViewController: UIViewController {
         super.viewDidLoad()
         
         safeArea = view.layoutMarginsGuide
-        print("view loaded")
-        view.backgroundColor = .white//may add a darkMode Later if i feel like it
+        view.backgroundColor = colorPattern.backgrounColor
         loadData()
         setupTableView(self.view)
         setupCreationBarButton(self.view)
         
     }
     func setupCreationBarButton(_ view:UIView){
-        if(agendas.title != "Click to define Name"){
+        if (agendas.title != "Click to define Name"){
             navigationItem.title = agendas.title
         }
-        let append = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
-        navigationItem.rightBarButtonItem = append
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
     }
     @objc func createButtonClicked(_ sender: UIButton) {
-        let vc = TaskDesignerViewController(TaskHandler(generateNewAgendaId()),saveAddedAgenda)
+        let vc = TaskEditorViewController(TaskHandler(generateNewAgendaId()),saveAddedAgenda)
         navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -64,7 +62,7 @@ class ItemDisplayViewController: UIViewController {
          Creates the ID when the user creates a new agenda
          should have a better system, but it works
          */
-        for x in 0 ... handlerNames.count+2{
+        for x in 0 ... handlerNames.count + 2{
             if(handlerNames.contains(String(x)) == false){
                 return String(x)
             }
@@ -73,22 +71,18 @@ class ItemDisplayViewController: UIViewController {
     }
     
     func saveAddedAgenda(_ handler:TaskElement){
-//        handlerNames.append(handler.id)
+
         agendas.tasks.append(handler)
-//        handler.saveAllTomatos()
         self.saveData()
         loadData()
         self.tableView.reloadData()
     }
     
     
-    
-    
-    
     let defaults = UserDefaults.standard
     struct keys{
         /**
-         standard key storage for user defraults keys.
+         standard key storage for user defaults keys.
          */
         static let names            = "handlerIDS"
         static let previouslyLoaded = "hasAppPreviouslyBeenLaunched"
@@ -109,49 +103,42 @@ class ItemDisplayViewController: UIViewController {
          Setup the table
          */
         let view = inputView
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = colorPattern.backgrounColor
         var safeArea  = UILayoutGuide()
         safeArea = view.layoutMarginsGuide
         tableView.delegate = self
         tableView.dataSource = self
         view.addSubview(self.tableView)
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
-        //        loadTableData()
         tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
     }
 }
 
 
 extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.agendas.tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let task = agendas.tasks[indexPath.row]
-//        let cell = AgendaCell.init(style: .subtitle, reuseIdentifier: "foo")
-//
-//        cell.setText(agenda.title)
-        let cell = TaskElementCell.init()
+        let cell = TaskElementCell.init(colorPattern)
         cell.setText(task)
         
         return cell
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         let data = agendas.tasks[indexPath.row].onShortClick()
         navigationController?.pushViewController(data, animated: true)
-        
     }
-    
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         /**

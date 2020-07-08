@@ -17,17 +17,18 @@ class TaskEditorViewController: UIViewController {
     
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
-    var viewElements : [UITableViewCell] = []
-    var textFieldElements : [UITextField] = []
+    var viewElements: [UITableViewCell] = []
+    var textFieldElements: [UITextField] = []
     
-    var resolvingAction:(_ task:TaskElement)->()
-    var editingTask :TaskElement
+    var resolvingAction: (_ task:TaskElement) -> ()
+    var editingTask: TaskElement
     
-    init(_ inputTask:TaskElement, _ resolvingAction: @escaping (_ task:TaskElement)->()){
+    init(_ inputTask:TaskElement, _ resolvingAction: @escaping (_ task:TaskElement)->()) {
         self.resolvingAction = resolvingAction
         editingTask = inputTask
         super.init(nibName: nil, bundle: nil)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -39,18 +40,17 @@ class TaskEditorViewController: UIViewController {
         print("view loaded")
         view.backgroundColor = .white //set it to the color that you prefer
         
-        
-        
         setupTableView(self.view)
         setupSaveButton(self.view)
     }
+    
     func setupSaveButton(_ inputView: UIView){
         let save = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonClicked))
         navigationItem.rightBarButtonItem = save
         print("save button loaded")
     }
+    
     @objc func saveButtonClicked(_ sender: UIButton){
-        
         //Best way i can think of to solve this at the moment, will cause errors if order is changed. (However this is a static order)
         editingTask.title = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
         editingTask.moreInfo = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
@@ -59,7 +59,8 @@ class TaskEditorViewController: UIViewController {
         //TODO make sure item is not blank
         self.navigationController?.popViewController(animated: true)
     }
-    func setupTableView(_ inputView: UIView){
+    
+    func setupTableView(_ inputView: UIView) {
         /**
          Setup the table
          */
@@ -75,21 +76,21 @@ class TaskEditorViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
+        tableView.backgroundColor = .white
+        
         loadTableData()
         tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
         
         print("table loaded")
     }
     
-    
-    
-    func loadTableData(){
+    func loadTableData() {
         //setup UI table cells here
         viewElements.append(createTextInputCell(editingTask.title))
         viewElements.append(createTextInputCell(editingTask.moreInfo))
     }
     
-    func createTextInputCell(_ placeholder:String) -> UITableViewCell{
+    func createTextInputCell(_ placeholder:String) -> UITableViewCell {
         let cell:UITableViewCell = UITableViewCell()
         let tf = UITextField(frame: CGRect(x:30, y:5, width:300, height:20))
         tf.placeholder = placeholder
@@ -98,12 +99,12 @@ class TaskEditorViewController: UIViewController {
         if(Tomato("").title != placeholder || Tomato("").moreInfo != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
             tf.text = placeholder
         }
-        
-        
         tf.font = UIFont.systemFont(ofSize: 15)
-        
+        tf.textColor = .black
+        tf.backgroundColor = .white
         cell.addSubview(tf)
         textFieldElements.append(tf)
+        cell.backgroundColor = .white
         return cell
     }
     
@@ -122,13 +123,12 @@ extension TaskEditorViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //        print("getting cell")
         
         return viewElements[indexPath.row]
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     

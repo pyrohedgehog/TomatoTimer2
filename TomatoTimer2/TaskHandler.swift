@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-class TaskHandler :Codable, TaskElement{
+class TaskHandler :Codable, TaskElement {
     func onShortClick() -> UIViewController {
         let controller = ItemDisplayViewController(self, StartScreenViewController.archive)
         return controller
@@ -17,10 +17,11 @@ class TaskHandler :Codable, TaskElement{
     /**
      The class for handling all the tomatos in a single agenda.
      */
-    var title    : String = ""
-    var id      : String
-    var tasks : [TaskElement]
-    var moreInfo : String = ""
+    var title = ""
+    var id: String
+    var tasks: [TaskElement]
+    var moreInfo: String = ""
+    var colorPattern = "light"
     
     
     init(_ id : String){
@@ -38,20 +39,19 @@ class TaskHandler :Codable, TaskElement{
     func loadPreviousSave(){
         let hasBeenSavedBefore = defaults.bool(forKey: id + keys.hasIdBeenSavedBefore)
         if(hasBeenSavedBefore){
-            self.title = defaults.string(forKey: id + keys.nameSave)!//not angry coding, if it has been saved than it MUST have a name
+            self.title = defaults.string(forKey: id + keys.nameSave) ?? ""
             self.moreInfo = defaults.string(forKey: id + keys.moreInfoSave) ?? ""
+            self.colorPattern = defaults.string(forKey: id + keys.colorPatternName) ?? ""
             loadAllTomatos()
         }else{
             saveCurrentSave()
         }
     }
     func saveCurrentSave(){
-//        if (title == ""){
-//            title = "Click to define Name"
-//        }
         defaults.set(true, forKey: id + keys.hasIdBeenSavedBefore)
         defaults.set(title, forKey: id + keys.nameSave)
         defaults.set(moreInfo, forKey: id + keys.moreInfoSave)
+        defaults.set(colorPattern, forKey: id + keys.colorPatternName)
         saveAllTomatos()
     }
     
@@ -59,7 +59,7 @@ class TaskHandler :Codable, TaskElement{
         /**
          makes the tutorial TomatoHandler. Only call if its the first time the user makes an "account"
          */
-        self.tasks = [Tomato("Hello", "click on tasks to edit them"),Tomato("world","click on tasks to edit them")]
+        self.tasks = [Tomato("Hello", "click on tasks to edit them"), Tomato("world","click on tasks to edit them")]
         self.title = "Tutorial"
         self.saveCurrentSave()
     }
@@ -69,6 +69,7 @@ class TaskHandler :Codable, TaskElement{
         static let hasIdBeenSavedBefore     = "Has id been used or saved before"
         static let nameSave                 = "Name Save point"
         static let moreInfoSave             = "More Info Save Point"
+        static let colorPatternName         = " ColorPattern"
     }
     
     //TODO: this will cause errors if user has multiple agendas with the same name...
@@ -95,7 +96,6 @@ class TaskHandler :Codable, TaskElement{
     }
     
     func loadAllTomatos(){
-//        print("loading all tomatos")
         tasks = []
         let tomatoCount = defaults.integer(forKey: self.id+keys.tomatosCount)
         for index in 0..<tomatoCount{
@@ -122,7 +122,6 @@ class TaskHandler :Codable, TaskElement{
     func addTask(_ task:TaskElement){
         self.tasks.append(task)
         saveAllTomatos()
-//        saveCurrentSave()
         if(self.id == "Archive"){
             print("added to archived file")
         }
