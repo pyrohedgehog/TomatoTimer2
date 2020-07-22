@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class TaskHandler :Codable, TaskElement {
     func onShortClick() -> UIViewController {
-        let controller = ItemDisplayViewController(self, StartScreenViewController.archive)
+        let controller = ItemDisplayViewController(self, UserStoarage.user().mainArchive)
         return controller
     }
     
@@ -37,21 +37,21 @@ class TaskHandler :Codable, TaskElement {
     }
     
     func loadPreviousSave(){
-        let hasBeenSavedBefore = defaults.bool(forKey: id + keys.hasIdBeenSavedBefore)
+        let hasBeenSavedBefore = UserStoarage.defaults.bool(forKey: id + UserStoarage.keys.hasIdBeenSavedBefore)
         if(hasBeenSavedBefore){
-            self.title = defaults.string(forKey: id + keys.nameSave) ?? ""
-            self.moreInfo = defaults.string(forKey: id + keys.moreInfoSave) ?? ""
-            self.colorPattern = defaults.string(forKey: id + keys.colorPatternName) ?? ""
+            self.title = UserStoarage.defaults.string(forKey: id + UserStoarage.keys.nameSave) ?? ""
+            self.moreInfo = UserStoarage.defaults.string(forKey: id + UserStoarage.keys.moreInfoSave) ?? ""
+            self.colorPattern = UserStoarage.defaults.string(forKey: id + UserStoarage.keys.colorPatternName) ?? ""
             loadAllTomatos()
         }else{
             saveCurrentSave()
         }
     }
     func saveCurrentSave(){
-        defaults.set(true, forKey: id + keys.hasIdBeenSavedBefore)
-        defaults.set(title, forKey: id + keys.nameSave)
-        defaults.set(moreInfo, forKey: id + keys.moreInfoSave)
-        defaults.set(colorPattern, forKey: id + keys.colorPatternName)
+        UserStoarage.defaults.set(true, forKey: id + UserStoarage.keys.hasIdBeenSavedBefore)
+        UserStoarage.defaults.set(title, forKey: id + UserStoarage.keys.nameSave)
+        UserStoarage.defaults.set(moreInfo, forKey: id + UserStoarage.keys.moreInfoSave)
+        UserStoarage.defaults.set(colorPattern, forKey: id + UserStoarage.keys.colorPatternName)
         saveAllTomatos()
     }
     
@@ -63,19 +63,11 @@ class TaskHandler :Codable, TaskElement {
         self.title = "Tutorial"
         self.saveCurrentSave()
     }
-    let defaults = UserDefaults.standard
-    struct keys{
-        static let tomatosCount             = " NumberOfTomatos"
-        static let hasIdBeenSavedBefore     = "Has id been used or saved before"
-        static let nameSave                 = "Name Save point"
-        static let moreInfoSave             = "More Info Save Point"
-        static let colorPatternName         = " ColorPattern"
-    }
     
     //TODO: this will cause errors if user has multiple agendas with the same name...
     func saveAllTomatos(){
         let encoder = JSONEncoder()
-        defaults.set(tasks.count, forKey: self.id+keys.tomatosCount)
+        UserStoarage.defaults.set(tasks.count, forKey: self.id+UserStoarage.keys.tomatosCount)
         
         for index in 0..<tasks.count{
             if (tasks[index] is Tomato){//tomato case
@@ -97,9 +89,9 @@ class TaskHandler :Codable, TaskElement {
     
     func loadAllTomatos(){
         tasks = []
-        let tomatoCount = defaults.integer(forKey: self.id+keys.tomatosCount)
+        let tomatoCount = UserStoarage.defaults.integer(forKey: self.id+UserStoarage.keys.tomatosCount)
         for index in 0..<tomatoCount{
-            if let savedPerson = defaults.object(forKey: self.id+" "+String(index)) as? Data {
+            if let savedPerson = UserStoarage.defaults.object(forKey: self.id+" "+String(index)) as? Data {
                 let decoder = JSONDecoder()
                 if let loadedTomato = try? decoder.decode(Tomato.self, from: savedPerson) {
                     tasks.append(loadedTomato)

@@ -12,9 +12,9 @@ class StartScreenViewController: UIViewController {
     /**
      welcome the user, login if required, then launch the home task
      */
-    public static var archive:TaskHandler = TaskHandler("Archive")
+//    public static var archive:TaskHandler = TaskHandler("Archive")
     init(){
-        StartScreenViewController.archive.title = "Archive"
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,8 +31,8 @@ class StartScreenViewController: UIViewController {
         let previouslyLoaded = defaults.bool(forKey: "hasAppPreviouslyBeenLaunched")//could be done by checking MainPage's existance, but this is more clear
         if(previouslyLoaded==false){
             mainPage.title = "Home Page"
-            mainPage.addTask(StartScreenViewController.archive)
-            StartScreenViewController.archive.saveCurrentSave()
+            mainPage.addTask(UserStoarage.user().mainArchive)
+            UserStoarage.user().mainArchive.saveCurrentSave()
             
             let tutorial = TaskHandler("Tutorial")
             tutorial.makeTutorial()
@@ -40,7 +40,7 @@ class StartScreenViewController: UIViewController {
             defaults.set(true, forKey: "hasAppPreviouslyBeenLaunched")
         }
         
-        let view = ItemDisplayViewController(mainPage,StartScreenViewController.archive)
+        let view = ItemDisplayViewController(mainPage,UserStoarage.user().mainArchive)
         navigationController?.setViewControllers([view], animated: true)
     }
 }

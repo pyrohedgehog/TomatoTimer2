@@ -6,8 +6,9 @@ class Tomato : Codable, TaskElement{
         
     }
     func resolveAction(_ tomato : TaskElement){
-        //TODO: Setup the save function...
-        print("")
+        //TODO: Created a saving action based on the individual tomato being editied
+//        UserStoarage.user().mainAgenda.saveAllTomatos()
+        
     }
     
     var title: String

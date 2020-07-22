@@ -13,7 +13,10 @@ protocol TaskElement : Codable {
     var title : String { get set}
     var moreInfo : String { get set}
     func onShortClick() -> UIViewController
+//    func encodeWithCoder(acoder: NSCoder!)
+//    func decodeWithCoder(acoder: NSCoder!)
 }
+
 
 
 class TaskElementCell : UITableViewCell {

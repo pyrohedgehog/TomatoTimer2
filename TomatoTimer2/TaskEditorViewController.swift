@@ -18,10 +18,13 @@ class TaskEditorViewController: UIViewController {
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     var viewElements: [UITableViewCell] = []
-    var textFieldElements: [UITextField] = []
+    var dataElements: [UITextField] = []
     
     var resolvingAction: (_ task:TaskElement) -> ()
     var editingTask: TaskElement
+    let defaultTaskTitle = "Click To Add Task Name"
+    let defaultTaskInfo = "Click To Add An Optional Task Description"
+    var isTaskHandler = false
     
     init(_ inputTask:TaskElement, _ resolvingAction: @escaping (_ task:TaskElement)->()) {
         self.resolvingAction = resolvingAction
@@ -44,20 +47,51 @@ class TaskEditorViewController: UIViewController {
         setupSaveButton(self.view)
     }
     
-    func setupSaveButton(_ inputView: UIView){
+    func setupSaveButton(_ inputView: UIView) {
         let save = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonClicked))
         navigationItem.rightBarButtonItem = save
-        print("save button loaded")
     }
     
-    @objc func saveButtonClicked(_ sender: UIButton){
-        //Best way i can think of to solve this at the moment, will cause errors if order is changed. (However this is a static order)
-        editingTask.title = (textFieldElements[0].text == nil || textFieldElements[0].text!.isEmpty) ? "": textFieldElements[0].text!
-        editingTask.moreInfo = (textFieldElements[1].text == nil || textFieldElements[1].text!.isEmpty) ? "": textFieldElements[1].text!
-        resolvingAction(editingTask)
-        print("save button clicked")
-        //TODO make sure item is not blank
+    @objc func saveButtonClicked(_ sender: UIButton) {
+        if(updateEditingHandler()) {
+            if((editingTask is TaskHandler) != isTaskHandler){//if state is switched
+                if(editingTask is TaskHandler) {
+                    let newEditing:Tomato = Tomato(editingTask.title, editingTask.moreInfo)
+                    (editingTask as! TaskHandler).deleteAllTasks()
+                    editingTask = newEditing
+                }else {
+                    let id = String(Int.random(in: 0 ..< 1000))//TODO replace this with a better option! THIS WILL BREAK
+                    let newEditing:TaskHandler = TaskHandler(id)
+                    newEditing.title = editingTask.title
+                    newEditing.moreInfo = editingTask.moreInfo
+                    editingTask = newEditing
+                }
+            }
+            
+            
+            resolvingAction(editingTask)
+        }else {
+            print("error occured during save")
+        }
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func updateEditingHandler() -> Bool {
+        /**
+         returns true if saved properly. (eg, no error values)
+         */
+        //TODO get all info for the handler to be updated with
+        let nameEntered = dataElements[0].text
+        if(nameEntered == "" || nameEntered == defaultTaskTitle) {//test for any and all edge cases here?
+            return false
+        }
+        
+        editingTask.title = nameEntered!
+        
+        let infoEntered = dataElements[1].text!//TODO this will cause errors for multy line entry
+        editingTask.moreInfo = infoEntered
+        
+        return true
     }
     
     func setupTableView(_ inputView: UIView) {
@@ -85,27 +119,62 @@ class TaskEditorViewController: UIViewController {
     }
     
     func loadTableData() {
-        //setup UI table cells here
-        viewElements.append(createTextInputCell(editingTask.title))
-        viewElements.append(createTextInputCell(editingTask.moreInfo))
-    }
-    
-    func createTextInputCell(_ placeholder:String) -> UITableViewCell {
-        let cell:UITableViewCell = UITableViewCell()
-        let tf = UITextField(frame: CGRect(x:30, y:5, width:300, height:20))
-        tf.placeholder = placeholder
-        
-        //This is a temporary fix, as a first step solution
-        if(Tomato("").title != placeholder || Tomato("").moreInfo != placeholder){//this overrides the placeholder in all test cases, but it *does* solve the problem
-            tf.text = placeholder
+        /**
+         heres where the different actual data/ UI for the cells is setup. Still Using the method of view cells array and data access array.
+         */
+        var cell:UITableViewCell = UITableViewCell()
+        var tf = UITextField(frame: CGRect(x:30, y:5, width:320, height:20))
+        tf.placeholder = defaultTaskTitle
+        if  !(editingTask.title == "" || editingTask.title == defaultTaskTitle){
+            tf.text = editingTask.title
+            tf.textColor = .black
+        }else{
+            tf.textColor = .gray
         }
         tf.font = UIFont.systemFont(ofSize: 15)
-        tf.textColor = .black
+        
         tf.backgroundColor = .white
-        cell.addSubview(tf)
-        textFieldElements.append(tf)
         cell.backgroundColor = .white
-        return cell
+        
+        cell.addSubview(tf)
+        dataElements.append(tf)
+        viewElements.append(cell)
+        
+        //info needs to be a textView(i think) not a textField for multiple line input.
+        
+        cell = UITableViewCell()
+        tf = UITextField(frame: CGRect(x:30, y:5, width:320, height:20))
+        tf.placeholder = defaultTaskInfo
+        if  !(editingTask.moreInfo == "" || editingTask.moreInfo == defaultTaskInfo){
+            tf.text = editingTask.moreInfo
+            tf.textColor = .black
+        }else{
+            tf.textColor = .gray
+        }
+        tf.backgroundColor = .white
+        cell.backgroundColor = .white
+        
+        
+        tf.font = UIFont.systemFont(ofSize: 15)
+        cell.addSubview(tf)
+        dataElements.append(tf)
+        viewElements.append(cell)
+        
+        
+        cell = UITableViewCell()
+        cell.textLabel?.text = "Make Task a ToDo List:"
+        let switchView = UISwitch(frame: .zero)
+        switchView.setOn(isTaskHandler, animated: true)
+        switchView.tag = 2//hardcoding the second index of the array, big problem if i want to reorder it...
+        switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+        switchView.backgroundColor = .white
+        cell.accessoryView = switchView
+        cell.backgroundColor = .white
+        viewElements.append(cell)
+    }
+    
+    @objc func switchChanged(_ sender : UISwitch!) {
+        isTaskHandler = !(isTaskHandler)
     }
     
     

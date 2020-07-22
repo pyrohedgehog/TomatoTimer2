@@ -20,7 +20,7 @@ class ItemDisplayViewController: UIViewController {
     
     init(_ handlerString: String){
         self.agendas = TaskHandler(handlerString)
-        self.archiveAgenda = StartScreenViewController.archive
+        self.archiveAgenda = UserStoarage.user().mainArchive
         self.colorPattern = ColorPattern.getColor(agendas.colorPattern)
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,7 +53,10 @@ class ItemDisplayViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
     }
     @objc func createButtonClicked(_ sender: UIButton) {
-        let vc = TaskEditorViewController(TaskHandler(generateNewAgendaId()),saveAddedAgenda)
+        let createdTask = TaskHandler(generateNewAgendaId())
+        createdTask.title = ""//fixes the bug of new tasks appearing with the title last entered
+        createdTask.moreInfo = ""
+        let vc = TaskEditorViewController(createdTask,saveAddedAgenda)
         navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -79,14 +82,7 @@ class ItemDisplayViewController: UIViewController {
     }
     
     
-    let defaults = UserDefaults.standard
-    struct keys{
-        /**
-         standard key storage for user defaults keys.
-         */
-        static let names            = "handlerIDS"
-        static let previouslyLoaded = "hasAppPreviouslyBeenLaunched"
-    }
+    
     func loadData(){
         agendas.loadPreviousSave()
         
@@ -94,7 +90,7 @@ class ItemDisplayViewController: UIViewController {
     }
     func saveData(){
         agendas.saveCurrentSave()
-        defaults.set(true, forKey: keys.previouslyLoaded)
+        UserStoarage.defaults.set(true, forKey: UserStoarage.keys.previouslyLoaded)
     }
     
     
