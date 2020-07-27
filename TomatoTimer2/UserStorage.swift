@@ -27,14 +27,15 @@ class UserStoarage {
         mainArchive = TaskHandler("Archive")
         mainArchive.title = "Archive"
         defaultColorPattern = ColorPattern.getColor("light")
+        
     }
     static let defaults = UserDefaults.standard
-    struct keys{
+    struct keys {
         /**
          standard key storage for user defaults keys.
          */
-        static let names            = "handlerIDS"
-        static let previouslyLoaded = "hasAppPreviouslyBeenLaunched"
+        static let names                    = "handlerIDS"
+        static let previouslyLoaded         = "hasAppPreviouslyBeenLaunched"
         static let tomatosCount             = " NumberOfTomatos"
         static let hasIdBeenSavedBefore     = "Has id been used or saved before"
         static let nameSave                 = "Name Save point"
@@ -42,12 +43,22 @@ class UserStoarage {
         static let colorPatternName         = " ColorPattern"
     }
     
-    private func loadFromSave(){
+    private func loadFromSave() {
         
     }
     
     class func user() -> UserStoarage {
         return setupUser
+    }
+    
+    func convertMainAgendaToJSON() -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try! encoder.encode(self.mainAgenda)
+        
+        print(String(data: data, encoding: .utf8)!)
+        
+        return(String(data: data, encoding: .utf8)!)
     }
     
 }

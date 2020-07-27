@@ -11,21 +11,21 @@ import UIKit
 class ItemDisplayViewController: UIViewController {
     //replaces AgendaViewController and AgendaSelectorViewController with this one class
     var agendas: TaskHandler
-    var handlerNames: [String] = []//i want to remove this, but havent gotten to it yet
+//    var handlerNames: [String] = []//i want to remove this, but havent gotten to it yet
     var archiveAgenda: TaskHandler
     let cellId = "agendaCellId"
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     var colorPattern: ColorPattern
     
-    init(_ handlerString: String){
+    init(_ handlerString: String) {
         self.agendas = TaskHandler(handlerString)
         self.archiveAgenda = UserStoarage.user().mainArchive
         self.colorPattern = ColorPattern.getColor(agendas.colorPattern)
         super.init(nibName: nil, bundle: nil)
     }
     
-    init(_ taskHandler:TaskHandler, _ archive:TaskHandler){
+    init(_ taskHandler:TaskHandler, _ archive:TaskHandler) {
         self.archiveAgenda = archive
         self.agendas = taskHandler
         self.colorPattern = ColorPattern.getColor(agendas.colorPattern)
@@ -39,6 +39,9 @@ class ItemDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        _ = UserStoarage.user().convertMainAgendaToJSON()
+        
+        
         safeArea = view.layoutMarginsGuide
         view.backgroundColor = colorPattern.backgrounColor
         loadData()
@@ -46,32 +49,21 @@ class ItemDisplayViewController: UIViewController {
         setupCreationBarButton(self.view)
         
     }
-    func setupCreationBarButton(_ view:UIView){
-        if (agendas.title != "Click to define Name"){
+    func setupCreationBarButton(_ view:UIView) {
+        if (agendas.title != "Click to define Name") {
             navigationItem.title = agendas.title
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createButtonClicked))
     }
     @objc func createButtonClicked(_ sender: UIButton) {
-        let createdTask = TaskHandler(generateNewAgendaId())
+        let createdTask = TaskHandler("")//TODO: once cloud system is implemented, no id will need to be passed
         createdTask.title = ""//fixes the bug of new tasks appearing with the title last entered
         createdTask.moreInfo = ""
         let vc = TaskEditorViewController(createdTask,saveAddedAgenda)
         navigationController?.pushViewController(vc, animated: true)
         
     }
-    func generateNewAgendaId() ->String{
-        /**
-         Creates the ID when the user creates a new agenda
-         should have a better system, but it works
-         */
-        for x in 0 ... handlerNames.count + 2{
-            if(handlerNames.contains(String(x)) == false){
-                return String(x)
-            }
-        }
-        return "this shouldnt happen, but if it does, you'll see this appear in the logs. If this is in logs, fix your generateNewAgendaId function"
-    }
+    
     
     func saveAddedAgenda(_ handler:TaskElement){
 

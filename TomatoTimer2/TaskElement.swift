@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-protocol TaskElement : Codable {
-    var title : String { get set}
-    var moreInfo : String { get set}
-    func onShortClick() -> UIViewController
+class TaskElement  : Codable  {
+    var title = ""
+    var moreInfo = ""
+    func onShortClick() -> UIViewController { return UIViewController() }
 //    func encodeWithCoder(acoder: NSCoder!)
 //    func decodeWithCoder(acoder: NSCoder!)
 }

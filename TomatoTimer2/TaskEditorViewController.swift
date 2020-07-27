@@ -41,7 +41,7 @@ class TaskEditorViewController: UIViewController {
         super.viewDidLoad()
         safeArea = view.layoutMarginsGuide
         print("view loaded")
-        view.backgroundColor = .white //set it to the color that you prefer
+        view.backgroundColor = UserStoarage.user().defaultColorPattern.backgrounColor
         
         setupTableView(self.view)
         setupSaveButton(self.view)
@@ -110,7 +110,8 @@ class TaskEditorViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = UserStoarage.user().defaultColorPattern.backgrounColor
+        
         
         loadTableData()
         tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
@@ -122,19 +123,21 @@ class TaskEditorViewController: UIViewController {
         /**
          heres where the different actual data/ UI for the cells is setup. Still Using the method of view cells array and data access array.
          */
+        let userColorPattern = UserStoarage.user().defaultColorPattern
         var cell:UITableViewCell = UITableViewCell()
         var tf = UITextField(frame: CGRect(x:30, y:5, width:320, height:20))
         tf.placeholder = defaultTaskTitle
         if  !(editingTask.title == "" || editingTask.title == defaultTaskTitle){
             tf.text = editingTask.title
-            tf.textColor = .black
+            tf.textColor = userColorPattern.mainTextColor
         }else{
-            tf.textColor = .gray
+            tf.textColor = userColorPattern.subTextColor
+            print("else")
         }
         tf.font = UIFont.systemFont(ofSize: 15)
         
-        tf.backgroundColor = .white
-        cell.backgroundColor = .white
+        tf.backgroundColor = userColorPattern.backgrounColor
+        cell.backgroundColor = userColorPattern.backgrounColor
         
         cell.addSubview(tf)
         dataElements.append(tf)
@@ -147,12 +150,12 @@ class TaskEditorViewController: UIViewController {
         tf.placeholder = defaultTaskInfo
         if  !(editingTask.moreInfo == "" || editingTask.moreInfo == defaultTaskInfo){
             tf.text = editingTask.moreInfo
-            tf.textColor = .black
+            tf.textColor = userColorPattern.mainTextColor
         }else{
-            tf.textColor = .gray
+            tf.textColor = userColorPattern.subTextColor
         }
-        tf.backgroundColor = .white
-        cell.backgroundColor = .white
+        tf.backgroundColor = userColorPattern.backgrounColor
+        cell.backgroundColor = userColorPattern.backgrounColor
         
         
         tf.font = UIFont.systemFont(ofSize: 15)
@@ -163,13 +166,14 @@ class TaskEditorViewController: UIViewController {
         
         cell = UITableViewCell()
         cell.textLabel?.text = "Make Task a ToDo List:"
+        cell.textLabel?.textColor = userColorPattern.mainTextColor
         let switchView = UISwitch(frame: .zero)
         switchView.setOn(isTaskHandler, animated: true)
         switchView.tag = 2//hardcoding the second index of the array, big problem if i want to reorder it...
         switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
-        switchView.backgroundColor = .white
+        switchView.backgroundColor = userColorPattern.backgrounColor
         cell.accessoryView = switchView
-        cell.backgroundColor = .white
+        cell.backgroundColor = userColorPattern.backgrounColor
         viewElements.append(cell)
     }
     
