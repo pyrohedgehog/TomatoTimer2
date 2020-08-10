@@ -29,17 +29,13 @@ class TaskHandler: TaskElement {
     
     
     enum CodingKeys: CodingKey {
-        case title, tasks, moreInfo, colorPattern, tasksStorage
+        case title, tasks, moreInfo, colorPattern
     }
     
     required init(from decoder: Decoder) throws {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
-//        tasks = try container.decode([TaskElement].self, forKey: .tasks)
-//        let subtasks = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .tasksStorage)
-        var subtasks = try container.nestedUnkeyedContainer(forKey: .tasksStorage)
-//        tasks = try subtasks.decode([TaskElement].self, forKey: .tasks)
-        tasks = try subtasks.decode([TaskElement].self)
+        tasks = try container.decode([TaskElement].self, forKey: .tasks)
         super.init()
         moreInfo = try container.decode(String.self, forKey: .moreInfo)
         title = try container.decode(String.self, forKey: .title)
@@ -49,21 +45,11 @@ class TaskHandler: TaskElement {
     
     
     override func encode(to encoder: Encoder) throws {
-        print("encoding handler")
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.title, forKey: .title)
         
         
-        var taskJSON: [String] = []
-        print(tasks)
-        for x in tasks{
-            print("does this even run???")
-            let coder = JSONEncoder()
-            coder.outputFormatting = .prettyPrinted
-            taskJSON.append(String(data: try coder.encode(x), encoding: .utf8)!)
-//            print(String(data: try coder.encode(x), encoding: .utf8)!)
-        }
-        try container.encode(taskJSON, forKey: .tasksStorage)
+        try container.encode(tasks, forKey: .tasks)
 
         try container.encode(moreInfo, forKey: .moreInfo)
         try container.encode(colorPattern, forKey: .colorPattern)
@@ -87,6 +73,7 @@ class TaskHandler: TaskElement {
 //        UserStoarage.defaults.set(moreInfo, forKey: id + UserStoarage.keys.moreInfoSave)
 //        UserStoarage.defaults.set(colorPattern, forKey: id + UserStoarage.keys.colorPatternName)
 //        saveAllTomatos()
+        UserStoarage.user().saveAll()
     }
     
     func makeTutorial(){
@@ -142,6 +129,7 @@ class TaskHandler: TaskElement {
         if(self.title == "Archive") {
             print("added to archived file")
         }
+        UserStoarage.user().saveAll()
     }
     func deleteAllTasks() {
         for x in tasks{

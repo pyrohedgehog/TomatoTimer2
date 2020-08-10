@@ -12,7 +12,6 @@ class StartScreenViewController: UIViewController {
     /**
      welcome the user, login if required, then launch the home task
      */
-//    public static var archive:TaskHandler = TaskHandler("Archive")
     init() {
         
         super.init(nibName: nil, bundle: nil)
@@ -23,14 +22,13 @@ class StartScreenViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        let mainPage = TaskHandler("MainPage")
+        let mainPage = UserStoarage.user().mainAgenda
         mainPage.title = ""
-        mainPage.moreInfo = "   "
+        mainPage.moreInfo = ""
         
         let defaults = UserDefaults.standard
-        let previouslyLoaded = defaults.bool(forKey: "hasAppPreviouslyBeenLaunched")//could be done by checking MainPage's existance, but this is more clear
-        if(previouslyLoaded==false || true){
-            mainPage.title = "Home Page"
+        let previouslyLoaded = defaults.bool(forKey: UserStoarage.keys.previouslyLoaded )//could be done by checking MainPage's existance, but this is more clear
+        if(previouslyLoaded == false){
             mainPage.addTask(UserStoarage.user().mainArchive)
             UserStoarage.user().mainArchive.saveCurrentSave()
             
@@ -38,8 +36,15 @@ class StartScreenViewController: UIViewController {
             tutorial.makeTutorial()
             mainPage.addTask(tutorial)
             defaults.set(true, forKey: "hasAppPreviouslyBeenLaunched")
+            UserStoarage.user().saveAll()
+        } else {
+            UserStoarage.user().loadFromSave()
         }
         
+        do {
+            sleep(4)
+        }
+        print("loading main view now!")
         let view = ItemDisplayViewController(mainPage,UserStoarage.user().mainArchive)
         navigationController?.setViewControllers([view], animated: true)
     }

@@ -39,7 +39,7 @@ class ItemDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        _ = UserStoarage.user().convertMainAgendaToJSON()
+        _ = UserStoarage.user().saveAll()
         
         
         safeArea = view.layoutMarginsGuide
