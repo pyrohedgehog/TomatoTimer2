@@ -70,6 +70,7 @@ class TaskEditorViewController: UIViewController {
             
             
             resolvingAction(editingTask)
+            UserStoarage.user().saveAll()
         }else {
             print("error occured during save")
         }
@@ -124,8 +125,8 @@ class TaskEditorViewController: UIViewController {
          heres where the different actual data/ UI for the cells is setup. Still Using the method of view cells array and data access array.
          */
         let userColorPattern = UserStoarage.user().defaultColorPattern
-        var cell:UITableViewCell = UITableViewCell()
-        var tf = UITextField(frame: CGRect(x:30, y:5, width:320, height:20))
+        var cell: UITableViewCell = UITableViewCell()
+        var tf = UITextField(frame: cell.frame)
         tf.placeholder = defaultTaskTitle
         if  !(editingTask.title == "" || editingTask.title == defaultTaskTitle){
             tf.text = editingTask.title
@@ -146,7 +147,8 @@ class TaskEditorViewController: UIViewController {
         //info needs to be a textView(i think) not a textField for multiple line input.
         
         cell = UITableViewCell()
-        tf = UITextField(frame: CGRect(x:30, y:5, width:320, height:20))
+        
+        tf = UITextField(frame: cell.frame)
         tf.placeholder = defaultTaskInfo
         if  !(editingTask.moreInfo == "" || editingTask.moreInfo == defaultTaskInfo){
             tf.text = editingTask.moreInfo
@@ -180,14 +182,7 @@ class TaskEditorViewController: UIViewController {
     @objc func switchChanged(_ sender : UISwitch!) {
         isTaskHandler = !(isTaskHandler)
     }
-    
-    
 }
-
-
-
-
-
 
 extension TaskEditorViewController: UITableViewDataSource, UITableViewDelegate {
     

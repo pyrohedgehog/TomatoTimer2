@@ -12,9 +12,12 @@ import UIKit
 class TaskElement  : Codable  {
     var title = ""
     var moreInfo = ""
+//    var childType = Tomato.self
     func onShortClick() -> UIViewController { return UIViewController() }
-//    func encodeWithCoder(acoder: NSCoder!)
-//    func decodeWithCoder(acoder: NSCoder!)
+    
+//    required init(from decoder: Decoder) throws {
+//        fatalError("NEVER TO BE DECODED AS TASKELEMENT")
+//    }
 }
 
 

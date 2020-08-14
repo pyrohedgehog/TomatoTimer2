@@ -27,7 +27,10 @@ class StartScreenViewController: UIViewController {
         mainPage.moreInfo = ""
         
         let defaults = UserDefaults.standard
-        let previouslyLoaded = defaults.bool(forKey: UserStoarage.keys.previouslyLoaded )//could be done by checking MainPage's existance, but this is more clear
+        var previouslyLoaded = defaults.bool(forKey: UserStoarage.keys.previouslyLoaded )//TODO: Replace this with a cloud check for a main page
+        
+//        previouslyLoaded = false//TODO: Remember this is only for ease of testing
+        
         if(previouslyLoaded == false){
             mainPage.addTask(UserStoarage.user().mainArchive)
             UserStoarage.user().mainArchive.saveCurrentSave()
@@ -45,7 +48,9 @@ class StartScreenViewController: UIViewController {
             sleep(4)
         }
         print("loading main view now!")
-        let view = ItemDisplayViewController(mainPage,UserStoarage.user().mainArchive)
+        let view = ItemDisplayViewController(UserStoarage.user().mainAgenda, UserStoarage.user().mainArchive)
+        view.tableView.reloadData()
         navigationController?.setViewControllers([view], animated: true)
+        view.tableView.reloadData()
     }
 }

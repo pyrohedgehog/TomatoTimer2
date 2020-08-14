@@ -27,19 +27,12 @@ class UserStoarage {
 
     
     private init() {
-
         mainAgenda = TaskHandler("MainPage")
         mainArchive = TaskHandler("Archive")
         mainArchive.title = "Archive"
         defaultColorPattern = ColorPattern.getColor("light")
-        
 
-//        self.loadFromSave()
     }
-    
-    
-
-    
     
     static let defaults = UserDefaults.standard
     struct keys {
@@ -72,7 +65,11 @@ class UserStoarage {
             let x: Data = (record[keys.cloudMainAgendaName] as! String).data(using: .utf8)!
             do{
                 self.mainAgenda = try JSONDecoder().decode(TaskHandler.self, from: x)
-                print("IT WORKED!!! LIKE< WORKED WORKED!!!")
+                for x in self.mainAgenda.tasks{//Find the MainArchive In the tasks
+                    if(x.title == "Archive" && x is TaskHandler){
+                        self.mainArchive = x as! TaskHandler
+                    }
+                }
             } catch {
                 print("error recording from database")
             }
@@ -82,29 +79,10 @@ class UserStoarage {
         operation.queryCompletionBlock = { cursor, error in
             DispatchQueue.main.async {
                 print("completion block ran")
-//                print("Titles: \(titles)")
-//                print("RecordIDs: \(recordIDs)")
             }
         }
         defaultContainer.privateCloudDatabase.add(operation)
     }
-    
-//    private func fetchUserRecord(recordID: CKRecord.ID) {
-//        // Fetch Private Database
-//        let privateDatabase = defaultContainer.privateCloudDatabase
-//
-//        // Fetch User Record
-//        privateDatabase.fetch(withRecordID: recordID) { (record, error) -> Void in
-//            if let responseError = error {
-//                print(responseError)
-//                print("this was the error")
-//
-//            } else if let userRecord = record{
-//                print(userRecord)
-//                print("THIS IS USER RECORD")
-//            }
-//        }
-//    }
     
     class func user() -> UserStoarage {
         return setupUser
@@ -140,8 +118,6 @@ class UserStoarage {
             }
         })
 //        loadAll()
-        
-        
     }
     
 }

@@ -76,7 +76,7 @@ class ItemDisplayViewController: UIViewController {
     
     
     func loadData(){
-        agendas.loadPreviousSave()
+//        agendas.loadPreviousSave()
         
         self.tableView.reloadData()
     }
@@ -136,7 +136,6 @@ extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate 
         let archiveButton = UIContextualAction(style: .normal, title: title, handler: { (action, view, completionHandler) in
             //setup archiving system here
             self.archiveAgenda.addTask(self.agendas.tasks.remove(at: indexPath.row))
-//            self.tomatos.remove(at: indexPath.row)
             self.archiveAgenda.saveCurrentSave()
             self.agendas.saveAllTomatos()
             self.tableView.reloadData()
