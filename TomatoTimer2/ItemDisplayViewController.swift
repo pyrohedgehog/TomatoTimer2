@@ -17,6 +17,7 @@ class ItemDisplayViewController: UIViewController {
     var safeArea = UILayoutGuide()
     let tableView = UITableView()
     var colorPattern: ColorPattern
+    let imageConfig = UIImage.SymbolConfiguration(weight: .semibold)//should make this configurable by user. So i dont have to pick anything besides the default
     
     init(_ handlerString: String) {
         self.agendas = TaskHandler(handlerString)
@@ -104,8 +105,10 @@ class ItemDisplayViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: safeArea.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: safeArea.rightAnchor).isActive = true
         
+        
         tableView.register(TaskElementCell.self, forCellReuseIdentifier: cellId)
     }
+
 }
 
 
@@ -124,9 +127,12 @@ extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        let data = agendas.tasks[indexPath.row].onShortClick()
-        navigationController?.pushViewController(data, animated: true)
+        if(agendas.tasks[indexPath.row] is TaskHandler){//Tomatos Break With this currently
+            let data = agendas.tasks[indexPath.row].onShortClick()
+            navigationController?.pushViewController(data, animated: true)
+        }
     }
+//    func tableView(
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         /**
@@ -143,13 +149,37 @@ extension ItemDisplayViewController: UITableViewDataSource, UITableViewDelegate 
             completionHandler(true)
         })
         
-        let imageConfig = UIImage.SymbolConfiguration(weight: .semibold)//should make this configurable by user. So i dont have to pick anything besides the default
         
         archiveButton.image = UIImage(systemName: "archivebox.fill", withConfiguration: imageConfig)
         
         archiveButton.backgroundColor = UIColor(red: 116/256, green: 255/256, blue: 106/256, alpha: 100/256) //i havent picked a colour yet, but i kinda like the gray, but the green seems more fitting. might make a user selection for those
         //the green was kinda a randomly chosen green.
         let config = UISwipeActionsConfiguration(actions: [archiveButton])
+        config.performsFirstActionWithFullSwipe = false
+        return config
+    }
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let settingButton = UIContextualAction(style: .normal, title: "", handler: { (action, view, completionHandler) in
+            //setup settings system here
+            self.agendas.saveAllTomatos()
+            self.tableView.reloadData()
+            let taskSelected = self.agendas.tasks[indexPath.row]
+            let data = TaskEditorViewController(taskSelected,{(_ task: TaskElement)->() in
+                if(task !== taskSelected){//Pointer has changed
+                    self.agendas.tasks[indexPath.row] = task
+                }
+                tableView.reloadData()
+            })
+            self.navigationController?.pushViewController(data, animated: true)
+            
+            completionHandler(true)
+        })
+        
+        settingButton.image = UIImage(systemName: "gear", withConfiguration: imageConfig)
+        
+        
+        let config = UISwipeActionsConfiguration(actions: [settingButton])
         config.performsFirstActionWithFullSwipe = false
         return config
     }

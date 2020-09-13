@@ -13,7 +13,11 @@ class TaskElement  : Codable  {
     var title = ""
     var moreInfo = ""
 //    var childType = Tomato.self
-    func onShortClick() -> UIViewController { return UIViewController() }
+    func onShortClick() -> UIViewController {
+        fatalError("ShortClick Not Established")
+        return UIViewController()
+        
+    }
     
 //    required init(from decoder: Decoder) throws {
 //        fatalError("NEVER TO BE DECODED AS TASKELEMENT")

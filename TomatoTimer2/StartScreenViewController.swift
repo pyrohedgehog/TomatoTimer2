@@ -45,7 +45,7 @@ class StartScreenViewController: UIViewController {
         }
         
         do {
-            sleep(4)
+            sleep(4)//could be a loading screen
         }
         print("loading main view now!")
         let view = ItemDisplayViewController(UserStoarage.user().mainAgenda, UserStoarage.user().mainArchive)

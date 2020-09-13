@@ -26,9 +26,12 @@ class TaskEditorViewController: UIViewController {
     let defaultTaskInfo = "Click To Add An Optional Task Description"
     var isTaskHandler = false
     
+    var changeBetweenHandlerAndTomatoDisplayed = true//By default this is set to True, but for specefic situations it should be false!
+    
     init(_ inputTask:TaskElement, _ resolvingAction: @escaping (_ task:TaskElement)->()) {
         self.resolvingAction = resolvingAction
         editingTask = inputTask
+        isTaskHandler = inputTask is TaskHandler
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -165,18 +168,19 @@ class TaskEditorViewController: UIViewController {
         dataElements.append(tf)
         viewElements.append(cell)
         
-        
-        cell = UITableViewCell()
-        cell.textLabel?.text = "Make Task a ToDo List:"
-        cell.textLabel?.textColor = userColorPattern.mainTextColor
-        let switchView = UISwitch(frame: .zero)
-        switchView.setOn(isTaskHandler, animated: true)
-        switchView.tag = 2//hardcoding the second index of the array, big problem if i want to reorder it...
-        switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
-        switchView.backgroundColor = userColorPattern.backgrounColor
-        cell.accessoryView = switchView
-        cell.backgroundColor = userColorPattern.backgrounColor
-        viewElements.append(cell)
+        if(changeBetweenHandlerAndTomatoDisplayed) {
+            cell = UITableViewCell()
+            cell.textLabel?.text = "Make Task a ToDo List:"
+            cell.textLabel?.textColor = userColorPattern.mainTextColor
+            let switchView = UISwitch(frame: .zero)
+            switchView.setOn(isTaskHandler, animated: true)
+            switchView.tag = 2//hardcoding the second index of the array, big problem if i want to reorder it...
+            switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+            switchView.backgroundColor = userColorPattern.backgrounColor
+            cell.accessoryView = switchView
+            cell.backgroundColor = userColorPattern.backgrounColor
+            viewElements.append(cell)
+        }
     }
     
     @objc func switchChanged(_ sender : UISwitch!) {

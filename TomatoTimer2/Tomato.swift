@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
 class Tomato: TaskElement {
-    override func onShortClick() -> UIViewController {
-        return TaskEditorViewController(self, resolveAction)
-        
-    }
+//    override func onShortClick() -> UIViewController {
+//        return TaskEditorViewController(self, resolveAction)
+//        
+//    }
     
     func resolveAction(_ tomato : TaskElement) {
         //TODO: Created a saving action based on the individual tomato being editied
